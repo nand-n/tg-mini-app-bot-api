@@ -8,6 +8,7 @@ import { ThrottlerModule } from '@nestjs/throttler';
 import { SharedModule } from '../core/shared.module';
 import { CoreModule } from './core.module';
 import { AppConfigModule } from '../config/app.config.module';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 
 /** This is a TypeScript module that imports various modules and sets up a TypeORM connection using
 configuration values obtained from a ConfigService. */
