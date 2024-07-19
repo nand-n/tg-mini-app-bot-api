@@ -8,6 +8,6 @@ import { AnnouncementsModule } from './modules/announcements/announcements.modul
 
 @Global()
 @Module({
-  imports: [PermissionModule, ProductsModule, UsersModule, ClientsModule , AnnouncementsModule],
+  imports: [PermissionModule, ProductsModule, UsersModule, ClientsModule , AnnouncementsModule ],
 })
 export class CoreModule {}
