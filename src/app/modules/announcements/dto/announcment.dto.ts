@@ -11,5 +11,8 @@ export class CreateAnnouncementDto {
   endTime: string;
 
   @IsInt()
+  numberOfTickets: number
+
+  @IsInt()
   availableTickets: number;
 }
