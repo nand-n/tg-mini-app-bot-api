@@ -1,7 +1,7 @@
-// import { BaseModel } from '@root/src/database/base.entity';
 import { BaseModel } from '../../../../database/base.model';
 import { Entity, Column, OneToMany } from 'typeorm';
 import { Product } from '../../products/entities/product.entity';
+import { Announcement } from '../../announcements/entities/announcement.entity';
 
 @Entity()
 export class User extends BaseModel {
@@ -13,4 +13,6 @@ export class User extends BaseModel {
 
   @OneToMany(() => Product, (product) => product.user)
   products: Product[];
+  @OneToMany(() => Announcement, (ticket) => ticket.announcment)
+  announcment: Announcement[];
 }
