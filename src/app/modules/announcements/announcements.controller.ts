@@ -1,4 +1,4 @@
-import { Controller, Post, Body } from '@nestjs/common';
+import { Controller, Post, Body, Get, Param } from '@nestjs/common';
 import { AnnouncementsService } from './announcements.service';
 import { CreateAnnouncementDto } from './dto/announcment.dto';
 
@@ -8,6 +8,15 @@ export class AnnouncementsController {
 
   @Post()
   async create(@Body() createAnnouncementDto: CreateAnnouncementDto) {
-    return this.announcementService.createAnnouncement(createAnnouncementDto);
+    return this.announcementService.create(createAnnouncementDto);
+  }
+  @Get()
+  async findAll() {
+    return this.announcementService.findAll();
+  }
+
+  @Get(':id')
+  async findOne(@Param('id') id: string) {
+    return this.announcementService.findOne(id);
   }
 }
