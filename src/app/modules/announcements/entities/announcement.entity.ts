@@ -1,6 +1,7 @@
 import { Entity, Column, OneToMany } from 'typeorm';
 import { BaseModel } from '@root/src/database/base.model';
 import { User } from '../../users/entities/user.entity';
+import { Ticket } from '../../tickets/entities/ticket.entity';
 
 @Entity('announcements')
 export class Announcement  extends BaseModel {
@@ -17,8 +18,8 @@ export class Announcement  extends BaseModel {
   numberOfTickets: number;
 
   @Column({ type: 'int' })
-  availableTicketsCount: number;
+  availableTickets: number;
 
-  @OneToMany(() => User, ticket => ticket.announcment)
-  announcment: User[];
+  @OneToMany(() => Ticket, ticket => ticket.announcement, { nullable: true })
+  tickets: Ticket[];
 }
