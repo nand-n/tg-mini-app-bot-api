@@ -14,7 +14,10 @@ export class Announcement  extends BaseModel {
   endTime: string;
 
   @Column({ type: 'int' })
-  availableTickets: number;
+  numberOfTickets: number;
+
+  @Column({ type: 'int' })
+  availableTicketsCount: number;
 
   @OneToMany(() => User, ticket => ticket.announcment)
   announcment: User[];
