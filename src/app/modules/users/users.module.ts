@@ -7,7 +7,7 @@ import { User } from './entities/user.entity';
 import { Product } from '../products/entities/product.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([User, Product])],
+  imports: [TypeOrmModule.forFeature([User, Product ])],
   controllers: [UsersController],
   providers: [UsersService, PaginationService],
 })
