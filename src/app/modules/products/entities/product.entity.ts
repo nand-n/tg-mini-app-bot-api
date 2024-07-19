@@ -1,5 +1,4 @@
 import { Entity, Column, ManyToOne, JoinColumn } from 'typeorm';
-// import { BaseModel } from '@root/src/database/base.entity';
 import { User } from '../../users/entities/user.entity';
 import { BaseModel } from '../../../../database/base.model';
 
