@@ -19,9 +19,7 @@ export class Product extends BaseModel {
   @Column('decimal', { scale: 2 })
   price: number;
 
-  @ManyToOne(() => User, (user) => user.products)
-  @JoinColumn({ name: 'userId', referencedColumnName: 'id' })
-  user: User;
+
 
   @Column({ nullable: true })
   userId: string;
