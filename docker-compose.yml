@@ -1,0 +1,36 @@
+version: '3'
+services:
+  db:
+    image: postgres
+    container_name: tbot
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: sampledb
+    ports:
+      - '5432:5432'
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+  pgadmintweb:
+    image: dpage/pgadmin4
+    container_name: pgadminwebtbot
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+    ports:
+      - '5050:80'
+    depends_on:
+      - db
+  # app:
+  #   build:
+  #     context: ./
+  #     dockerfile: Dockerfile
+  #     target: development
+  #   ports:
+  #     - '3000:3000'
+  #   volumes:
+  #     - ./:/app
+  #   depends_on:
+  #     - db
+volumes:
+  postgres_data:
