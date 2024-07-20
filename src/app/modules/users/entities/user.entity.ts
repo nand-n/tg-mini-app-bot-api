@@ -1,6 +1,8 @@
 import { BaseModel } from '../../../../database/base.model';
 import { Entity, Column, OneToMany } from 'typeorm';
 import { Ticket } from '../../tickets/entities/ticket.entity';
+import { IsOptional } from 'class-validator';
+import { Payment } from '../../payment/entities/payment.entity';
 
 @Entity()
 export class User extends BaseModel {
@@ -18,5 +20,9 @@ export class User extends BaseModel {
 
   @OneToMany(() => Ticket, (ticket) => ticket.user,  { nullable: true })
   tickets: Ticket[];
+
+  @IsOptional()
+  @OneToMany(() => Payment, (payment) => payment.user)
+  payments: Payment[];
 
 }
