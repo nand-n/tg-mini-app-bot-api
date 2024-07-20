@@ -11,7 +11,6 @@ export class Ticket extends BaseModel {
   @IsOptional()
   @ManyToOne(() => User, user => user.tickets,  { nullable: true })
   player: User;
-
   @IsOptional()
   @ManyToOne(() => User, user => user.tickets,  { nullable: true })
   createdBy: User;
