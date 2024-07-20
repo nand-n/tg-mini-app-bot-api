@@ -18,8 +18,10 @@ export class User extends BaseModel {
   @Column({ length: 50, type: 'varchar' })
   email: string;
 
-  @OneToMany(() => Ticket, (ticket) => ticket.user,  { nullable: true })
+  @OneToMany(() => Ticket, (ticket) => ticket.player,  { nullable: true })
   tickets: Ticket[];
+  @OneToMany(() => Ticket, (ticket) => ticket.createdBy,  { nullable: true })
+  ticketsCreatedBy: Ticket[];
 
   @IsOptional()
   @OneToMany(() => Payment, (payment) => payment.user)

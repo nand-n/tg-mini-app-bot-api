@@ -43,7 +43,8 @@ export class TicketsService {
 
     const ticket = this.ticketsRepository.create({
         announcement:announcement,
-        user:user
+        player:null,
+        createdBy: user
     });
     return this.ticketsRepository.save(ticket);
   }

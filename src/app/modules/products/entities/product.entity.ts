@@ -19,8 +19,6 @@ export class Product extends BaseModel {
   @Column('decimal', { scale: 2 })
   price: number;
 
-
-
   @Column({ nullable: true })
   userId: string;
 }
