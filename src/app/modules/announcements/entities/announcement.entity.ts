@@ -18,7 +18,7 @@ export class Announcement  extends BaseModel {
   numberOfTickets: number;
 
   @Column({ type: 'int' })
-  availableTickets: number;
+  availableTicketsCount: number;
 
   @OneToMany(() => Ticket, ticket => ticket.announcement, { nullable: true })
   tickets: Ticket[];
