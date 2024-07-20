@@ -34,11 +34,11 @@ export class TicketsService {
       throw new Error('Announcement not found');
     }
 
-    if (announcement.availableTickets <= 0) {
+    if (announcement.availableTicketsCount <= 0) {
       throw new Error('No tickets available');
     }
 
-    announcement.availableTickets -= 1;
+    announcement.availableTicketsCount -= 1;
     await this.announcementsRepository.save(announcement);
 
     const ticket = this.ticketsRepository.create({
