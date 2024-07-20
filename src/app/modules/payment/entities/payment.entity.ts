@@ -14,9 +14,7 @@ export class Payment extends BaseModel {
   @IsOptional()
   @ManyToOne(() => User, (user) => user.payments)
   user: User;
-
-  @IsOptional()
-
+  
   @IsOptional()
   @Column({ nullable: true })
   amount: number;
