@@ -21,6 +21,7 @@ export class AnnouncementsService {
     for (let i = 0; i < createAnnouncementDto.numberOfTickets; i++) {
       await this.ticketsService.create({
         announcementId: savedAnnouncement.id,
+        number: i++,
         userId: null,
       });
     }
@@ -28,7 +29,9 @@ export class AnnouncementsService {
     return savedAnnouncement;
   }
   findAll() {
-    return this.announcementRepository.find();
+    return this.announcementRepository.find({
+      relations:['tickets']
+    });
   }
 
   findOne(id: string) {
