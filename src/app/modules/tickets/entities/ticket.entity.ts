@@ -1,4 +1,4 @@
-import { Entity, ManyToOne } from 'typeorm';
+import { Column, Entity, ManyToOne } from 'typeorm';
 import { BaseModel } from '@root/src/database/base.model';
 import { Announcement } from '../../announcements/entities/announcement.entity';
 import { User } from '../../users/entities/user.entity';
@@ -11,6 +11,11 @@ export class Ticket extends BaseModel {
   @IsOptional()
   @ManyToOne(() => User, user => user.tickets,  { nullable: true })
   player: User;
+  
+  @IsOptional()
+  @Column({ type: 'int' ,nullable:true},)
+  payerPhone: number;
+  
   @IsOptional()
   @ManyToOne(() => User, user => user.tickets,  { nullable: true })
   createdBy: User;
