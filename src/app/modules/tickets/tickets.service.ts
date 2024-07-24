@@ -59,7 +59,8 @@ async  findAll() {
     return await this.ticketsRepository.findOne({
         where:{
             id
-        }
+        }, 
+        relations:['player']
     });
   }
 
