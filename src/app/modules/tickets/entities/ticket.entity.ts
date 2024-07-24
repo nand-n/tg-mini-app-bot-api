@@ -12,6 +12,8 @@ export class Ticket extends BaseModel {
   @ManyToOne(() => User, user => user.tickets,  { nullable: true })
   player: User;
   
+  @Column({ type: 'int'},)
+  number: number;
   @IsOptional()
   @Column({ type: 'int' ,nullable:true},)
   payerPhone: number;
