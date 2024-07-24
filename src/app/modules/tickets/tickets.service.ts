@@ -1,10 +1,11 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Ticket } from './entities/ticket.entity';
 import { CreateTicketDto } from './dto/create-ticket.dto';
 import { Announcement } from '../announcements/entities/announcement.entity';
 import { User } from '../users/entities/user.entity';
+import { AssignTicketDto } from './dto/assign-ticket.dto';
 
 @Injectable()
 export class TicketsService {
@@ -44,13 +45,14 @@ export class TicketsService {
     const ticket = this.ticketsRepository.create({
         announcement:announcement,
         player:null,
+        payerPhone:null,
         createdBy: user
     });
     return this.ticketsRepository.save(ticket);
   }
 
 async  findAll() {
-    return await this.ticketsRepository.find();
+    return (await this.ticketsRepository.find({ relations: ['player'] }));
   }
 
  async findOne(id: string) {
@@ -59,5 +61,31 @@ async  findAll() {
             id
         }
     });
+  }
+
+  async assignTicket(id: string, assignTicketDto: AssignTicketDto): Promise<Ticket> {
+    const { userId, phoneNumber } = assignTicketDto;
+
+    const ticket = await this.ticketsRepository.findOne({
+      where:{
+        id
+      }
+    });
+    if (!ticket) {
+      throw new NotFoundException('Ticket not found');
+    }
+
+    if (userId) {
+      const user = await this.userRepository.findOne( { 
+        where :{ id :userId}});
+      if (!user) {
+        throw new NotFoundException('User not found');
+      }
+      ticket.player = user;
+    } else if (phoneNumber) {
+      ticket.payerPhone = phoneNumber;
+    }
+
+    return this.ticketsRepository.save(ticket);
   }
 }
