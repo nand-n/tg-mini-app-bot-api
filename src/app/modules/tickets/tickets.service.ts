@@ -20,7 +20,7 @@ export class TicketsService {
 ) {}
 
   async create(createTicketDto: CreateTicketDto) {
-    const { announcementId, userId } = createTicketDto;
+    const { announcementId, userId , number } = createTicketDto;
     const announcement = await this.announcementsRepository.findOne({
         where:{
             id: announcementId
@@ -45,6 +45,7 @@ export class TicketsService {
     const ticket = this.ticketsRepository.create({
         announcement:announcement,
         player:null,
+        number,
         payerPhone:null,
         createdBy: user
     });
