@@ -12,7 +12,4 @@ export class CreateAnnouncementDto {
 
   @IsInt()
   numberOfTickets: number
-
-  @IsInt()
-  availableTicketsCount: number;
 }
