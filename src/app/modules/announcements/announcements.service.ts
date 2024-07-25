@@ -21,7 +21,7 @@ export class AnnouncementsService {
     for (let i = 0; i < createAnnouncementDto.numberOfTickets; i++) {
       await this.ticketsService.create({
         announcementId: savedAnnouncement.id,
-        number: i++,
+        number: i+1,
         userId: null,
       });
     }
