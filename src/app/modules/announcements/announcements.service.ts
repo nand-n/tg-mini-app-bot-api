@@ -38,7 +38,8 @@ export class AnnouncementsService {
     return this.announcementRepository.findOne({
       where:{
         id
-      }
+      },
+      relations:['tickets']
     });
   }
 }
