@@ -58,6 +58,13 @@ async  findAll() {
     });
   }
 
+  async findAllTicketsByAnnounmcent(id:string) {
+    return await this.ticketsRepository
+    .createQueryBuilder('ticket')
+    .where('ticket.announcementId = :id' , {id})
+    .getMany()
+  }
+
   async assignTicket(id: string, assignTicketDto: AssignTicketDto): Promise<Ticket> {
     const { userId, phoneNumber } = assignTicketDto;
 
