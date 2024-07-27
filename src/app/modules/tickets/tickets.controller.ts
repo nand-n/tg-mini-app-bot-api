@@ -16,6 +16,12 @@ export class TicketsController {
   findAll() {
     return this.ticketsService.findAll();
   }
+  @Get(':id')
+  findOne(
+    @Param('id') id:string,
+  ) {
+    return this.ticketsService.findOne(id);
+  }
   @Patch(':id/assign')
   assignTicket(
     @Param('id') id: string,
