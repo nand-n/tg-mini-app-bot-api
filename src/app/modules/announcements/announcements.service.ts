@@ -28,18 +28,21 @@ export class AnnouncementsService {
 
     return savedAnnouncement;
   }
-  findAll() {
-    return this.announcementRepository.find({
-      relations:['tickets']
-    });
+async findAll() {
+    return await this.announcementRepository
+    .createQueryBuilder('announcement')
+    .leftJoinAndSelect('announcement.tickets', 'ticket')
+    .orderBy('ticket.number', 'ASC') 
+    .getMany();
+
   }
 
-  findOne(id: string) {
-    return this.announcementRepository.findOne({
-      where:{
-        id
-      },
-      relations:['tickets']
-    });
+  async findOne(id: string) {
+    return await this.announcementRepository
+    .createQueryBuilder('announcement')
+    .leftJoinAndSelect('announcement.tickets', 'ticket')
+    .where('announcement.id = :id', { id })
+    .orderBy('ticket.number', 'ASC') 
+    .getOne();
   }
 }
