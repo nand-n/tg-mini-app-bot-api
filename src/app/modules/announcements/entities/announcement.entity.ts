@@ -11,7 +11,7 @@ export class Announcement  extends BaseModel {
   @Column({ type: 'date' })
   endDate: string;
 
-  @Column({ type: 'time' })
+  @Column({ type: 'text' }) 
   endTime: string;
 
   @Column({ type: 'int' })
