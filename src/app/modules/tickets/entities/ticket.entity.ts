@@ -15,7 +15,7 @@ export class Ticket extends BaseModel {
   @Column({ type: 'int'},)
   number: number;
   @IsOptional()
-  @Column({ type: 'int' ,nullable:true},)
+  @Column({ type: 'bigint' ,nullable:true},)
   payerPhone: number;
   
   @IsOptional()
