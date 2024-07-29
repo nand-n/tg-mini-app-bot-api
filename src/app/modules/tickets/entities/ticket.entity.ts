@@ -18,6 +18,9 @@ export class Ticket extends BaseModel {
   @Column({ type: 'bigint' ,nullable:true},)
   payerPhone: number;
   
+  @Column({ type: 'boolean' , default:false },)
+  isPayed: boolean;
+  
   @IsOptional()
   @ManyToOne(() => User, user => user.tickets,  { nullable: true })
   createdBy: User;
