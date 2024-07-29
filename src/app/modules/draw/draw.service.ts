@@ -1,6 +1,6 @@
 import { BadRequestException, ConflictException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { In, Not, Repository } from 'typeorm';
 import { Draw } from './entities/draw.entity';
 import { CreateDrawDto } from './dto/create-draw.dto';
 import { Announcement } from '../announcements/entities/announcement.entity';
@@ -59,6 +59,7 @@ export class DrawsService {
 
     return Promise.all(draws);
   }
+
   async findAllByAnnouncement(announcementId: string): Promise<Draw[]> {
     return this.drawsRepository.find({
         where: { announcementId },
@@ -71,5 +72,30 @@ export class DrawsService {
       throw new NotFoundException('Draw not found');
     }
     return draw;
+  }
+
+  async findAnnouncementsWithoutDraws(): Promise<Announcement[]> {
+    const draws = await this.drawsRepository.find();
+    const drawAnnouncementIds = draws.map(draw => draw.announcementId);
+
+    const announcements = await this.announcementsRepository.find({
+      where: drawAnnouncementIds.length ? { id: Not(In(drawAnnouncementIds)) } : {},
+    });
+
+    return announcements;
+  }
+
+  async findAnnouncementsWithDraws(): Promise<Announcement[]> {
+    const drawAnnouncementIds = (await this.drawsRepository.find()).map(draw => draw.announcementId);
+
+    if (drawAnnouncementIds.length === 0) {
+      throw new NotFoundException('No announcements with draws found');
+    }
+
+    const announcements = await this.announcementsRepository.find({
+      where: { id: In(drawAnnouncementIds) },
+    });
+
+    return announcements;
   }
 }
