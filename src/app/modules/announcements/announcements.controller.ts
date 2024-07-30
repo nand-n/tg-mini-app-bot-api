@@ -15,6 +15,14 @@ export class AnnouncementsController {
     return this.announcementService.findAll();
   }
 
+  @Get('open')
+  async findAllUnclosedAnnoucment(){
+    return this.announcementService.findAllUnclosedAnnoucment()
+  }
+  @Get('closed')
+  async findAlllosedAAnnoucment(){
+    return this.announcementService.findAlllosedAAnnoucment()
+  }
   @Get(':id')
   async findOne(@Param('id') id: string) {
     return this.announcementService.findOne(id);
