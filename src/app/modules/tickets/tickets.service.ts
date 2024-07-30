@@ -90,4 +90,13 @@ async  findAll() {
 
     return this.ticketsRepository.save(ticket);
   }
+  async updateIsPayed(id: string): Promise<Ticket> {
+    const ticket = await this.ticketsRepository.findOne({ where: { id } });
+    if (!ticket) {
+      throw new NotFoundException('Ticket not found');
+    }
+
+    ticket.isPayed = !ticket.isPayed;
+    return this.ticketsRepository.save(ticket);
+  }
 }
