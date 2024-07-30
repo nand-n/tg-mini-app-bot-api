@@ -35,4 +35,11 @@ export class TicketsController {
   ): Promise<Ticket> {
     return this.ticketsService.assignTicket(id, assignTicketDto);
   }
+
+  @Patch('/payed/:id')
+  updateIsPayed(
+    @Param('id') id: string,
+  ): Promise<Ticket> {
+    return this.ticketsService.updateIsPayed(id,);
+  }
 }
