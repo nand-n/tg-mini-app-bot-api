@@ -17,6 +17,10 @@ export class Ticket extends BaseModel {
   @IsOptional()
   @Column({ type: 'bigint' ,nullable:true},)
   payerPhone: number;
+
+  @IsOptional()
+  @Column({ type: 'text' ,nullable:true},)
+  telegramUser: string;
   
   @Column({ type: 'boolean' , default:false },)
   isPayed: boolean;
