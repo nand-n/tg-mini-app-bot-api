@@ -7,11 +7,11 @@ interface Subaccount {
 }
 export interface InitializeOptions {
   first_name: string;
-  last_name: string;
-  email: string;
+  last_name?: string;
+  email?: string;
   currency: string;
   amount: string;
-  phone_number: string;
+  phone_number?: string;
   tx_ref: string;
   callback_url?: string;
   return_url?: string;
