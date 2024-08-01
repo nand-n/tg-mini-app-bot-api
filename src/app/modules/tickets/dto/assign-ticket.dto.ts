@@ -8,4 +8,8 @@ export class AssignTicketDto {
   @IsOptional()     
   @IsString()
   phoneNumber?: number;
+  
+  @IsOptional()     
+  @IsString()
+  telegramUser?: string;
 }
