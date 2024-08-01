@@ -66,7 +66,7 @@ async  findAll() {
   }
 
   async assignTicket(id: string, assignTicketDto: AssignTicketDto): Promise<Ticket> {
-    const { userId, phoneNumber } = assignTicketDto;
+    const { userId, phoneNumber , telegramUser } = assignTicketDto;
 
     const ticket = await this.ticketsRepository.findOne({
       where:{
@@ -86,9 +86,38 @@ async  findAll() {
       ticket.player = user;
     } else if (phoneNumber) {
       ticket.payerPhone = phoneNumber;
+    }else   if (telegramUser) {
+      ticket.telegramUser = telegramUser;
     }
+  
 
     return this.ticketsRepository.save(ticket);
+  }
+  async findAllMyTickets(assignTicketDto: AssignTicketDto): Promise<Ticket[]> {
+    const { userId, phoneNumber, telegramUser } = assignTicketDto;
+
+    const queryBuilder = this.ticketsRepository.createQueryBuilder('ticket')
+    .leftJoinAndSelect('ticket.announcement', 'announcement');;
+
+    if (userId) {
+      queryBuilder.orWhere('ticket.playerId = :userId', { userId });
+    }
+    
+    if (phoneNumber) {
+      queryBuilder.orWhere('ticket.payerPhone = :phoneNumber', { phoneNumber });
+    }
+    
+    if (telegramUser) {
+      queryBuilder.orWhere('ticket.telegramUser = :telegramUser', { telegramUser });
+    }
+
+    const tickets = await queryBuilder.getMany();
+
+    if (!tickets.length) {
+      throw new NotFoundException('No tickets found for the given criteria');
+    }
+
+    return tickets;
   }
   async updateIsPayed(id: string): Promise<Ticket> {
     const ticket = await this.ticketsRepository.findOne({ where: { id } });
