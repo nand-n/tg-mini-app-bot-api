@@ -11,10 +11,14 @@ import {
   InitializeOptions,
   VerifyOptions,
 } from "src/app/modules/chapa-sdk";
+import { CreateEqubPaymentDto } from "./dto/create-equb.dto";
+import { PaymentService } from "./payment.service";
 
 @Controller("payment")
 export class PaymentController {
-  constructor(private readonly chapaService: ChapaService) {}
+  constructor(private readonly chapaService: ChapaService,
+    private readonly paymentService: PaymentService
+  ) {}
 
   @Post("initialize/:userId/purchase/:bookId")
   async initialize(
@@ -48,5 +52,10 @@ export class PaymentController {
   @Post("mobile-initialize")
   initializeMobile(@Body() initializeMobile: InitializeOptions) {
     return this.chapaService.mobileInitialize(initializeMobile);
+  }
+
+  @Post("equb")
+  async createEqubPayment(@Body() createEqubPaymentDto: CreateEqubPaymentDto) {
+    return this.paymentService.createEqubPayment(createEqubPaymentDto);
   }
 }
