@@ -22,6 +22,13 @@ export class TicketsController {
   ) {
     return this.ticketsService.findOne(id);
   }
+  @Post('/my-tickets')
+  async findMyTickets(
+    @Body() myTickets: AssignTicketDto,
+  ) {
+    return this.ticketsService.findAllMyTickets(myTickets);
+  }
+
   @Get('/announcment/:id')
   findAllTicketsByAnnouncmentId(
     @Param('id') id:string,
