@@ -31,6 +31,7 @@ export class PaymentController {
     });
   }
 
+  
   @Get("verify/:tx_ref")
   verify(@Param() verifyOptions: VerifyOptions) {
     return this.chapaService.verify(verifyOptions);
