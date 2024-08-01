@@ -10,9 +10,14 @@ import { TicketsModule } from './modules/tickets/tickets.module';
 // import { ChapaModule } from './modules/chapa-sdk';
 import { DrawsModule } from './modules/draw/draw.module';
 import { TelegramBotModule } from './modules/telegramBot/telegram.module';
+import { ChapaModule } from './modules/chapa-sdk';
 
 @Global()
 @Module({
-  imports: [PermissionModule, ProductsModule, UsersModule, ClientsModule , AnnouncementsModule , TicketsModule , DrawsModule, TelegramBotModule],
+  imports: [PermissionModule, ProductsModule, UsersModule, ClientsModule , AnnouncementsModule , TicketsModule , DrawsModule, TelegramBotModule , ChapaModule.register({
+    secretKey: process.env.CHAPA_SECRET_KEY,
+  }),],
+
+  
 })
 export class CoreModule {}
