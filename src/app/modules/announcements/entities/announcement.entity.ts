@@ -1,6 +1,5 @@
 import { Entity, Column, OneToMany } from 'typeorm';
 import { BaseModel } from '@root/src/database/base.model';
-import { User } from '../../users/entities/user.entity';
 import { Ticket } from '../../tickets/entities/ticket.entity';
 
 @Entity('announcements')
