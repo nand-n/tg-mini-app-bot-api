@@ -26,10 +26,8 @@ export class GreeterUpdate {
     await ctx.telegram.sendMessage(ctx.chat.id, "Welcome! Choose an option below or type a command.", {
       reply_markup: {
         keyboard: [
-          [{ text: "Announcements" }],
-          [{ text: "Closed Announcements" }],
-          [{ text: "My Tickets" }]
-
+          [{ text: "Announcements" }, { text: "Closed Announcements" }],
+          [{ text: "My Tickets" }, { text: "Settings" }],
         ],
         resize_keyboard: true,  
         one_time_keyboard: true 
@@ -50,7 +48,6 @@ export class GreeterUpdate {
       }
     });
   }
-
   @Hears("Closed Announcements")
   async onClosedAnnouncements(@Ctx() ctx: Context): Promise<void> {
     const announcements = await this.announcementsService.findAlllosedAAnnoucment();
@@ -154,19 +151,30 @@ async onMyTickets(@Ctx() ctx: Context): Promise<void> {
   }
 }
 
+
   @Action(/ticket_(.+)/)
-  async onTicketDetail(@Ctx() ctx: Context): Promise<void> {
-    const ticketId = ctx.match[1];
+async onTicketDetail(@Ctx() ctx: Context): Promise<void> {
+  const ticketId = ctx.match[1];
 
-    const assignTicketDto = new AssignTicketDto();
+  const assignTicketDto = new AssignTicketDto();
 
-    if (ctx.from) {
-      assignTicketDto.telegramUser = ctx.from.username;
-    }
-
-    await this.ticketsService.assignTicket(ticketId, assignTicketDto);
-    await ctx.reply(`Ticket details for ID: ${ticketId}`);
+  if (ctx.from) {
+    assignTicketDto.telegramUser = ctx.from.username;
   }
+
+  await this.ticketsService.assignTicket(ticketId, assignTicketDto);
+  
+  await ctx.reply(`Ticket details for ID: ${ticketId}`, {
+    reply_markup: {
+      inline_keyboard: [
+        [
+          { text: 'Pay Now', callback_data: `pay_${ticketId}` },
+          { text: 'Pay Later', callback_data: `pay_later_${ticketId}` }
+        ]
+      ]
+    }
+  });
+}
   @Action(/pay_(.+)/)
   async onPayTicket(@Ctx() ctx: Context): Promise<void> {
     const ticketId = ctx.match[1];
@@ -182,13 +190,25 @@ async onMyTickets(@Ctx() ctx: Context): Promise<void> {
       last_name:ctx.from.username,
       amount: "1000", 
       currency: 'ETB',
-      tx_ref: `ticket_${ticketId}`,
-      // callback_url: 'http://localhost:3000.com/payments/verify', 
+      tx_ref: `ticket_${ticketId}${Date.now()}`,
+      phone_number:"0937108836",
+      callback_url: 'http://0.0.0.0:3000.com/payments/verify', 
+      return_url:'https://t.me/@loto_lick_bot'
     };
 
+
     try {
-      const { payment_url } = await this.chapaService.initialize(initializeOptions);
-      await ctx.reply(`Please complete your payment by clicking the link below:\n${payment_url}`);
+      const { checkout_url } = await this.chapaService.initialize(initializeOptions);
+      await ctx.reply('Please complete your payment by clicking the button below.', {
+        reply_markup: {
+          inline_keyboard: [[
+            {
+              text: 'Checkout',
+              web_app: { url: checkout_url.checkout_url }
+            }
+          ]]
+        }
+      });
     } catch (error) {
       console.error('Payment request failed:', error);
       await ctx.reply('Failed to initiate payment. Please try again later.');
