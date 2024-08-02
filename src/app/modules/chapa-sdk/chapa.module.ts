@@ -66,7 +66,6 @@ export class ChapaModule {
       };
     }
 
-    // For useExisting...
     return {
       provide: CHAPA_OPTIONS,
       useFactory: async (optionsFactory: ChapaOptionsFactory) =>
