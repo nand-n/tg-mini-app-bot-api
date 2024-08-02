@@ -78,18 +78,6 @@ export class ChapaService implements IChapaService {
       const user = await this.userRepository.findOne({
         where: { id: initializeOptions?.userId },
       });
-      // const book = await this.bookRepository.findOne({
-      //   where: { id: initializeOptions?.bookId },
-      // });
-      // initializeOptions.callback_url = `http://10.0.2.2:3000/api/verify/${initializeOptions.tx_ref}`;
-      // const logoUrl = `${process.env.IMG_URL}logo.png`;
-      // initializeOptions.customization = {
-      //   title: "Hulubooks",
-      //   logo: logoUrl,
-      //   description: `You are buying ${book.title}`,
-      // };
-      // initializeOptions.return_url = `http://10.0.2.2:3000/api/verify/${initializeOptions.tx_ref}`;
-      // initializeOptions.amount = book.price.toString();
       const responseData: any = {};
       const response = await this.httpService.axiosRef.post<InitializeResponse>(
         ChapaUrls.INITIALIZE,
@@ -106,9 +94,7 @@ export class ChapaService implements IChapaService {
         const purchase = await this.paymentRepository
           .createQueryBuilder("payment")
           .where("payment.user = :userId", { userId: initializeOptions.userId })
-          .andWhere("payment.book = :bookId", {
-            bookId: initializeOptions.bookId,
-          })
+          
           .getOne();
         if (purchase) {
           purchase.user = user;
@@ -123,8 +109,6 @@ export class ChapaService implements IChapaService {
           if (purchased) {
             const populatedPurchase = await this.paymentRepository
               .createQueryBuilder("payment")
-              .leftJoinAndSelect("payment.user", "user")
-              .leftJoinAndSelect("payment.book", "book")
               .where("payment.id = :id", { id: purchased.id })
               .getOne();
             responseData.purchased = { ...populatedPurchase };
@@ -142,8 +126,6 @@ export class ChapaService implements IChapaService {
           if (purchased) {
             const populatedPurchase = await this.paymentRepository
               .createQueryBuilder("payment")
-              .leftJoinAndSelect("payment.user", "user")
-              .leftJoinAndSelect("payment.book", "book")
               .where("payment.id = :id", { id: purchased.id })
               .getOne();
             responseData.purchased = { ...populatedPurchase };
