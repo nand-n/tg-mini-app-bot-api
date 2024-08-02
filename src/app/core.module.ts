@@ -15,7 +15,7 @@ import { ChapaModule } from './modules/chapa-sdk';
 @Global()
 @Module({
   imports: [PermissionModule, ProductsModule, UsersModule, ClientsModule , AnnouncementsModule , TicketsModule , DrawsModule, TelegramBotModule , ChapaModule.register({
-    secretKey: process.env.CHAPA_SECRET_KEY,
+    secretKey: "CHASECK_TEST-EJCfEadYMB8UTtwE6MzTPJ5KNhwHTn4s",
   }),],
 
   
