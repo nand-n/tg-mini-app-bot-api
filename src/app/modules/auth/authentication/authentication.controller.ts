@@ -4,8 +4,8 @@ import { AuthenticationService } from "./authentication.service";
 import { Auth } from "./decorators/auth.decorator";
 import { AuthType } from "./enums/auth-type.enum";
 import { RefreshTokenDto } from "./dto/refresh-token.dto";
-import { SignUpDto } from "./dto/sign-up";
-import { SignInDto } from "./dto/sign-in.dot";
+import { SignUpDto } from "./dto/sign-up.dto";
+import { SignInDto } from "./dto/sign-in.dto";
 
 @Auth(AuthType.None)
 @Controller("authentication")
