@@ -11,10 +11,11 @@ import { TicketsModule } from './modules/tickets/tickets.module';
 import { DrawsModule } from './modules/draw/draw.module';
 import { TelegramBotModule } from './modules/telegramBot/telegram.module';
 import { ChapaModule } from './modules/chapa-sdk';
+import { AuthModule } from './modules/auth/auth.module';
 
 @Global()
 @Module({
-  imports: [PermissionModule, ProductsModule, UsersModule, ClientsModule , AnnouncementsModule , TicketsModule , DrawsModule, TelegramBotModule , ChapaModule.register({
+  imports: [PermissionModule, ProductsModule, UsersModule, ClientsModule , AnnouncementsModule , TicketsModule , DrawsModule, TelegramBotModule ,AuthModule, ChapaModule.register({
     secretKey: "CHASECK_TEST-EJCfEadYMB8UTtwE6MzTPJ5KNhwHTn4s",
   }),],
 
