@@ -91,10 +91,9 @@ export class ChapaService implements IChapaService {
         },
       );
       if (response.status) {
-        const purchase = await this.paymentRepository
+        let purchase = await this.paymentRepository
           .createQueryBuilder("payment")
           .where("payment.user = :userId", { userId: initializeOptions.userId })
-          
           .getOne();
         if (purchase) {
           purchase.user = user;
@@ -116,10 +115,8 @@ export class ChapaService implements IChapaService {
         } else {
           const purchase = new Payment();
           purchase.user = user;
-          // purchase.book = book;
           purchase.tx_ref = initializeOptions.tx_ref;
           purchase.payment_date = new Date();
-          // purchase.amount = parseFloat(book.price.toString());
           purchase.payment_method = "Direct";
 
           const purchased = await this.paymentRepository.save(purchase);
