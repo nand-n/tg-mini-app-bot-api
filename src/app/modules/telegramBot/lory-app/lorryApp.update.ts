@@ -38,11 +38,19 @@ export class GreeterUpdate {
   @Hears("Announcements")
   async onAnnouncements(@Ctx() ctx: Context): Promise<void> {
     const announcements = await this.announcementsService.findAllUnclosedAnnoucment();
-    const inlineKeyboard = announcements.map(announcement => {
-      return [{ text: announcement.name, callback_data: `announcement_${announcement.id}` }];
-    });
-
-    await ctx.telegram.sendMessage(ctx.chat.id, "Here are the announcements...", {
+    const inlineKeyboard: Array<Array<{ text: string, callback_data: string }>> = [];
+  
+    for (let i = 0; i < announcements.length; i += 2) {
+      const row = [
+        { text: announcements[i].name, callback_data: `announcement_${announcements[i].id}` }
+      ];
+      if (i + 1 < announcements.length) {
+        row.push({ text: announcements[i + 1].name, callback_data: `announcement_${announcements[i + 1].id}` });
+      }
+      inlineKeyboard.push(row);
+    }
+  
+    await ctx.telegram.sendMessage(ctx.chat.id, "Here are the lottery announcements...", {
       reply_markup: {
         inline_keyboard: inlineKeyboard
       }
@@ -73,11 +81,14 @@ export class GreeterUpdate {
       return;
     }
 
-    // Create ticket buttons
-    const ticketButtons = announcement.tickets.map(ticket => ({
-      text: `${ticket.number}`,
-      callback_data: `ticket_${ticket.id}`
-    }));
+
+      // Create ticket buttons with red X for paid tickets
+  const ticketButtons = announcement.tickets.map(ticket => 
+    ticket.isPayed 
+      ? { text: '❌', callback_data: `ticket_unavailable_${ticket.id}` }  // Distinct callback_data for unavailable tickets
+      : { text: `${ticket.number}`, callback_data: `ticket_${ticket.id}` }
+  );
+
 
     // Group buttons into rows of 4
     const inlineKeyboard = [];
@@ -94,7 +105,6 @@ export class GreeterUpdate {
       }
     );
   }
-
   @Hears("My Tickets")
 async onMyTickets(@Ctx() ctx: Context): Promise<void> {
   const assignTicketDto = new AssignTicketDto();
@@ -151,8 +161,14 @@ async onMyTickets(@Ctx() ctx: Context): Promise<void> {
   }
 }
 
+@Action(/ticket_unavailable_(.+)/)
+async onTicketUnavailable(@Ctx() ctx: Context): Promise<void> {
+  const ticketId = ctx.match[1];
 
-  @Action(/ticket_(.+)/)
+  await ctx.reply("The selected ticket is unavailable. Please select another ticket.");
+}
+
+@Action(/ticket_(.+)/)
 async onTicketDetail(@Ctx() ctx: Context): Promise<void> {
   const ticketId = ctx.match[1];
 
@@ -162,19 +178,30 @@ async onTicketDetail(@Ctx() ctx: Context): Promise<void> {
     assignTicketDto.telegramUser = ctx.from.username;
   }
 
+
+  const ticket = await this.ticketsService.findOne(ticketId);
+
   await this.ticketsService.assignTicket(ticketId, assignTicketDto);
-  
-  await ctx.reply(`Ticket details for ID: ${ticketId}`, {
-    reply_markup: {
-      inline_keyboard: [
-        [
-          { text: 'Pay Now', callback_data: `pay_${ticketId}` },
-          { text: 'Pay Later', callback_data: `pay_later_${ticketId}` }
+
+  await ctx.reply(
+    `You have selected ticket number 🎟️ ${ticket?.number} from the lottery announcement " ${ticket?.announcement?.name} ".\n\n` +
+    `Price ${ticket?.ticketPrice} ETB. \n`+
+    `You can choose to pay now or later.\n` +
+    `💡 *Disclaimer:* While you haven't paid for this ticket, it remains available for purchase by others.`,
+    {
+      reply_markup: {
+        inline_keyboard: [
+          [
+            { text: `Pay ${ticket.ticketPrice} ETB Now`, callback_data: `pay_${ticketId}` },
+            { text: 'Pay Later', callback_data: `paylater_${ticketId}` }
+          ]
         ]
-      ]
+      },
+      parse_mode: 'Markdown' 
     }
-  });
+  );
 }
+
   @Action(/pay_(.+)/)
   async onPayTicket(@Ctx() ctx: Context): Promise<void> {
     const ticketId = ctx.match[1];
@@ -185,17 +212,17 @@ async onTicketDetail(@Ctx() ctx: Context): Promise<void> {
       return;
     }
 
+    const ticketRef = `ticket_${ticketId}${Date.now()}`
     const initializeOptions: InitializeOptions = {
       first_name:ctx.from.first_name,
       last_name:ctx.from.username,
-      amount: "1000", 
+      amount: `${ticket?.ticketPrice}`, 
       currency: 'ETB',
-      tx_ref: `ticket_${ticketId}${Date.now()}`,
+      tx_ref: ticketRef,
       phone_number:"0937108836",
-      callback_url: 'http://0.0.0.0:3000.com/payments/verify', 
-      return_url:'https://t.me/@loto_lick_bot'
+      // callback_url: 'http://0.0.0.0:3000/payments/verify', 
+      // return_url:`http://localhost:3000/payments/verify/${ticketRef}`
     };
-
 
     try {
       const { checkout_url } = await this.chapaService.initialize(initializeOptions);
@@ -203,18 +230,35 @@ async onTicketDetail(@Ctx() ctx: Context): Promise<void> {
         reply_markup: {
           inline_keyboard: [[
             {
-              text: 'Checkout',
+              text: 'Complate Payment - Checkout',
               web_app: { url: checkout_url.checkout_url }
             }
           ]]
         }
       });
+
     } catch (error) {
       console.error('Payment request failed:', error);
       await ctx.reply('Failed to initiate payment. Please try again later.');
     }
   }
+  
+  @Action(/paylater_(.+)/)
+async onPayLater(@Ctx() ctx: Context): Promise<void> {
+  const ticketId = ctx.match[1];
+
+  // Inform the user about the "Pay Later" option and how to pay later
+  await ctx.reply(
+    `You have chosen to pay later for ticket number 🎟️ ${ticketId}.\n\n` +
+    `🕒 *You can pay for this ticket later by clicking on the "My Tickets" option.*\n` +
+    `📜 In "My Tickets", you'll find a list of your selected tickets with the option to pay now or later. Simply select the ticket you want to pay for and choose "Pay Now".\n\n` +
+    `If you have any questions or need assistance, feel free to ask!`,
+    {
+      parse_mode: 'Markdown' 
+    }
+  );
 }
 
+}
 
 
