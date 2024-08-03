@@ -15,4 +15,7 @@ export class CreateAnnouncementDto {
 
   @IsInt()
   numberOfTickets: number
+
+  @IsInt()
+  ticketPrice: number
 }
