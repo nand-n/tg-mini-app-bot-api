@@ -20,6 +20,7 @@ async function bootstrap() {
   const httpAdapterHost = app.get(HttpAdapterHost);
   const loggerService = app.get(LoggerService);
   app.useGlobalFilters(new AllExceptionsFilter(httpAdapterHost, loggerService));
+  
 
   app.useGlobalPipes(new ValidationPipe());
   app.use(helmet());
