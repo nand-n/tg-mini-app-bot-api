@@ -1,19 +1,22 @@
-// Payment.ts
 import { IsIn, IsOptional } from "class-validator";
 import {
   Entity,
-  PrimaryGeneratedColumn,
   Column,
   ManyToOne,
 } from "typeorm";
 import { User } from "../../users/entities/user.entity";
 import { BaseModel } from "@root/src/database/base.model";
+import { Ticket } from "../../tickets/entities/ticket.entity";
 
 @Entity()
 export class Payment extends BaseModel {
   @IsOptional()
   @ManyToOne(() => User, (user) => user.payments)
   user: User;
+
+  @IsOptional()
+  @ManyToOne(() => Ticket, (ticket) => ticket.payment)
+  ticket: Ticket;
   
   @IsOptional()
   @Column({ nullable: true })
@@ -29,7 +32,7 @@ export class Payment extends BaseModel {
 
   @IsOptional()
   @Column({ default: "PENDING" })
-  @IsIn(["PENDING", "COMPLETED"])
+  @IsIn(["PENDING", "COMPLETED" , "FAILED"])
   status: string;
   @IsOptional()
   @Column({ nullable: true })
