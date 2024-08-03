@@ -40,7 +40,8 @@ export class TicketsService {
         player:null,
         number,
         payerPhone:null,
-        createdBy: user
+        createdBy: user,
+        ticketPrice:createTicketDto.ticketPrice
     });
     return this.ticketsRepository.save(ticket);
   }
@@ -54,7 +55,7 @@ async  findAll() {
         where:{
             id
         }, 
-        relations:['player']
+        relations:['player', 'announcement']
     });
   }
 
