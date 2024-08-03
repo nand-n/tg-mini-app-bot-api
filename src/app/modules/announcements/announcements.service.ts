@@ -26,6 +26,7 @@ export class AnnouncementsService {
         announcementId: savedAnnouncement.id,
         number: i+1,
         userId: null,
+        ticketPrice:createAnnouncementDto.ticketPrice
       });
     }
 
