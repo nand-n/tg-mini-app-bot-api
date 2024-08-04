@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { ForbiddenException, Injectable } from '@nestjs/common';
 
 import { InjectRepository } from '@nestjs/typeorm';
 
@@ -9,6 +9,8 @@ import { PaginationService } from '../../../core/pagination/pagination.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { User } from './entities/user.entity';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { Role } from './enums/role.enum';
+import { PermissionType } from '../auth/autherization/permission.type';
 
 @Injectable()
 export class UsersService {
@@ -53,5 +55,25 @@ export class UsersService {
       throw new Error(`User with id ${id} not found.`);
     }
     return await this.userRepository.softDelete({ id });
+  }
+
+  async assignRole(id: string, role: Role, currentUser: User): Promise<User> {
+    this.ensureSuperuser(currentUser);
+    const user = await this.findOne(id);
+    user.role = role;
+    return this.userRepository.save(user);
+  }
+
+  async updatePermissions(id: string, permissions: PermissionType[] , currentUser: User): Promise<User> {
+    this.ensureSuperuser(currentUser);
+    const user = await this.findOne(id);
+    user.permissions = permissions;
+    return this.userRepository.save(user);
+  }
+
+  private ensureSuperuser(currentUser: User): void {
+    if (currentUser.role !== Role.SuperAdmin) {
+      throw new ForbiddenException('You do not have permission to perform this action.');
+    }
   }
 }
