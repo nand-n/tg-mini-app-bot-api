@@ -16,8 +16,9 @@ import { AUTH_TYPE_KEY } from "../decorators/auth.decorator";
       AuthType,
       CanActivate | CanActivate[]
     > = {
-      [AuthType.Bearer]: this.accessTokenGuard,
-      [AuthType.None]: { canActivate: () => true },
+        [AuthType.Bearer]: this.accessTokenGuard,
+        [AuthType.None]: { canActivate: () => true },
+        [AuthType.User]: undefined
     };
   
     constructor(
