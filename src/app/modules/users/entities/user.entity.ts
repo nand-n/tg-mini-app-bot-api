@@ -13,32 +13,25 @@ export class User extends BaseModel {
   @Column({ length: 500, type: 'varchar' })
   password: string;
 
-  // @Column({length:10 , type: 'varchar' , default:'player' , enum:["player" , "admin" , "superadmin"]})
-  // role:string
-
-  // @Column({ enum: ["create" , "update" , ""], default: [], type: "json" })
-  // permissions: PermissionType[];
-
-  @Column({ enum: Role, default: Role.Regular })
+  @Column({ length:50 , type: 'varchar' , enum: Role, default: Role.Regular })
   role: Role;
 
   @Column({ enum: Permission, default: [], type: "json" })
   permissions: PermissionType[];
 
-  @Column({ length: 50, type: 'varchar' ,nullable:true})
+  @Column({ length: 50, type: 'varchar' ,nullable:true , unique:true})
   phone: string;
 
-  @Column({ length: 50, type: 'varchar', nullable:true })
+  @Column({ length: 50, type: 'varchar', nullable:true , unique:true })
   email: string;
 
-  @Column({ length: 50, type: 'varchar', nullable:true })
+  @Column({ length: 50, type: 'varchar', nullable:true , unique:true })
   telegramUser: string;
 
   @OneToMany(() => Ticket, (ticket) => ticket.player,  { nullable: true })
   tickets: Ticket[];
   @OneToMany(() => Ticket, (ticket) => ticket.createdBy,  { nullable: true })
   ticketsCreatedBy: Ticket[];
-
   @IsOptional()
   @OneToMany(() => Payment, (payment) => payment.user)
   payments: Payment[];
