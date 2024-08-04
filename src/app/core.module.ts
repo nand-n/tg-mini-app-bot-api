@@ -15,7 +15,7 @@ import { AuthModule } from './modules/auth/auth.module';
 
 @Global()
 @Module({
-  imports: [PermissionModule, ProductsModule, UsersModule, ClientsModule , AnnouncementsModule , TicketsModule , DrawsModule, TelegramBotModule ,AuthModule, ChapaModule.register({
+  imports: [PermissionModule, ProductsModule, UsersModule, ClientsModule , AnnouncementsModule , TicketsModule , DrawsModule, TelegramBotModule , ChapaModule.register({
     secretKey: "CHASECK_TEST-EJCfEadYMB8UTtwE6MzTPJ5KNhwHTn4s",
   }),],
 
