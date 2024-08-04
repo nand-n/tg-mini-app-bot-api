@@ -1,12 +1,15 @@
 import { Controller, Post, Body, Get, Param } from '@nestjs/common';
 import { AnnouncementsService } from './announcements.service';
 import { CreateAnnouncementDto } from './dto/announcment.dto';
+import { Roles } from '../auth/autherization/decorators/role.decorator';
+import { Role } from '../users/enums/role.enum';
 
 @Controller('announcements')
 export class AnnouncementsController {
   constructor(private readonly announcementService: AnnouncementsService) {}
 
   @Post()
+  @Roles(Role.Admin)
   async create(@Body() createAnnouncementDto: CreateAnnouncementDto) {
     return this.announcementService.create(createAnnouncementDto);
   }
