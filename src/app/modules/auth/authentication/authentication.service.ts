@@ -18,6 +18,7 @@ import { SignInDto } from "./dto/sign-in.dto";
 import { ActiveUserData } from "../interface/active-user-data.interface";
 import { InvalidateRefreshTokenError } from "./errors/invalidate-refresh-toke.error";
 import { RefreshTokenIdsStorage } from "./refres-token-ids.storage";
+import { Role } from "../../users/enums/role.enum";
   
   @Injectable()
   export class AuthenticationService {
@@ -34,10 +35,15 @@ import { RefreshTokenIdsStorage } from "./refres-token-ids.storage";
     async signUp(signUpDto: SignUpDto) {
       try {
         const user = new User();
-        user.email = signUpDto.email;
+        user.name = signUpDto.name;
         user.password = await this.hashingService.hash(signUpDto.password);
+        user.email = signUpDto.email;
+        user.phone = signUpDto.phone;
+        user.telegramUser = signUpDto.telegramUser;
+        user.role = signUpDto.role || Role.Regular;
+        user.permissions = signUpDto.permissions || [];
   
-        await this.userRepository.save(user);
+        return await this.userRepository.save(user);
       } catch (err) {
         const pgUniqueViolationCode = "23505";
         if (err.code === pgUniqueViolationCode) {
