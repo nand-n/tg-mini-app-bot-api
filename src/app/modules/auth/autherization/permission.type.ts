@@ -1,11 +1,11 @@
-enum CoffeesPermission {
-    CreateCoffee = "create_coffee",
-    UpdateCoffee = "update_coffee",
-    DeleteCoffee = "delete_coffee",
+enum UserPermission {
+    Create = "create-admin",
+    Update = "update-admin",
+    Delete = "delete-admin",
   }
 
 export const Permission = {
-  ...CoffeesPermission,
+  ...UserPermission,
 };
 
-export type PermissionType = CoffeesPermission;
+export type PermissionType = UserPermission;
