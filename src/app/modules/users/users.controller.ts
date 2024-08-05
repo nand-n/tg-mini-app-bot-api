@@ -20,6 +20,7 @@ import { Roles } from '../auth/autherization/decorators/role.decorator';
 import { Role } from './enums/role.enum';
 import { AccessTokenGuard } from '../auth/authentication/guards/access-token.guard';
 import { REQUEST_USER } from '../auth/auth.constants';
+import { RolesGuard } from '../auth/autherization/guards/roles.guard';
 
 @Controller('users')
 @ApiTags('Users')
@@ -32,7 +33,7 @@ export class UsersController {
   }
 
   @Get()
-  @Roles(Role.SuperAdmin)
+  @Roles(Role.Admin)
   @UseGuards(AccessTokenGuard)
   async findAll(
     @Query() options: IPaginationOptions,
