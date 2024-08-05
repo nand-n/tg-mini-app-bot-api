@@ -10,7 +10,7 @@ import jwtConfig from '../auth/config/jwt.config';
 import { ConfigModule } from '@nestjs/config';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([User, Product ]) , forwardRef(() => AuthModule) ,  ConfigModule.forFeature(jwtConfig),],
+  imports: [TypeOrmModule.forFeature([User, Product ]) , forwardRef(() => AuthModule) ,  ConfigModule.forFeature(jwtConfig)],
   controllers: [UsersController],
   providers: [UsersService, PaginationService],
   exports: [UsersService],
