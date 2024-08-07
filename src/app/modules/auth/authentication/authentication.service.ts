@@ -67,7 +67,15 @@ import { Role } from "../../users/enums/role.enum";
       if (!isEqual) {
         throw new UnauthorizedException("Wrong password");
       }
-      return await this.generateTokens(user);
+      const tokens = await this.generateTokens(user);
+      delete user.password 
+      delete user.deletedAt
+      delete user.payments
+      delete user.tickets
+      delete user.ticketsCreatedBy
+      delete user.updatedAt
+      delete user.createdAt
+      return {...tokens , user }
     }
   
     async generateTokens(user: User) {
