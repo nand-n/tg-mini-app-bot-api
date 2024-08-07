@@ -7,7 +7,7 @@ import { TicketsService } from '../../tickets/tickets.service';
 import { AssignTicketDto } from '../../tickets/dto/assign-ticket.dto';
 import { Announcement } from '../../announcements/entities/announcement.entity';
 import { Ticket } from '../../tickets/entities/ticket.entity';
-import { ChapaService, InitializeOptions } from '../../chapa-sdk';
+import { ChapaService, InitializeOptions, SplitType } from '../../chapa-sdk';
 
 export interface Context extends TelegrafContext {
   match: RegExpMatchArray;
@@ -26,14 +26,16 @@ export class GreeterUpdate {
     await ctx.telegram.sendMessage(ctx.chat.id, "Welcome! Choose an option below or type a command.", {
       reply_markup: {
         keyboard: [
-          [{ text: "Announcements" }, { text: "Closed Announcements" }],
-          [{ text: "My Tickets" }, { text: "Settings" }],
+          [{ text: "Announcements" }, { text: "Lucky Numbers" }],
+          [{ text: "My Tickets" }, { text: "Lounch App" ,web_app:{url:"https://lotoapp-nahomdebele002gmailcoms-projects.vercel.app"}}],
         ],
         resize_keyboard: true,  
         one_time_keyboard: true 
-      }
+
+      },
     });
   }
+
 
   @Hears("Announcements")
   async onAnnouncements(@Ctx() ctx: Context): Promise<void> {
@@ -104,6 +106,53 @@ export class GreeterUpdate {
         }
       }
     );
+  }
+  @Hears("Lucky Numbers")
+  async onLuckyNumbers(@Ctx() ctx: Context): Promise<void> {
+    try {
+      await ctx.reply(`
+        <b>Mamesodo Apache 180cc motor ምርት ውጤት (ውጤት code B01) ቀን 27/11/10</b>
+  
+        <b>➤ 1፡፡ <span style="color: blue; font-size: 1.2em;">2 3 8</span></b>
+        0911119734
+        Chere ክቡርን 01ተ እንኳን አደረሳህ!
+  
+        <hr>
+  
+        <b>➤ 2፡፡ <span style="color: blue; font-size: 1.2em;">1 9 7</span></b>
+        0911193868
+        Online ከእናት
+  
+        <hr>
+  
+        <b>➤ 3፡፡ <span style="color: blue; font-size: 1.2em;">5 4 2</span></b>< >
+        0925106919
+        Online አርባ
+  
+        <hr>
+  
+        <b>➤ 4፡፡ <span style="color: blue; font-size: 1.2em;">3 2 7</span></b>
+        0906455052
+        Online Hawssa
+  
+        <hr>
+        
+        <b>➤ 5፡፡ <span style="color: blue; font-size: 1.2em;">2 2 1</span></b>
+        0911792904
+        Online ከእናት
+  
+        <hr>
+  
+        <span style="font-size: 1.2em;">😍 እንኳን ምርትን እንኳን ደስ አለን!</span>
+  
+        <span style="color: red; font-weight: bold;">⚠️ ለማረጋገጥ mereja</span>
+  
+        0910008689
+
+      `);
+    } catch (error) {
+      console.error('Error sending message:', error);
+    }
   }
   @Hears("My Tickets")
 async onMyTickets(@Ctx() ctx: Context): Promise<void> {
@@ -182,7 +231,6 @@ async onTicketDetail(@Ctx() ctx: Context): Promise<void> {
   const ticket = await this.ticketsService.findOne(ticketId);
 
   await this.ticketsService.assignTicket(ticketId, assignTicketDto);
-
   await ctx.reply(
     `You have selected ticket number 🎟️ ${ticket?.number} from the lottery announcement " ${ticket?.announcement?.name} ".\n\n` +
     `Price ${ticket?.ticketPrice} ETB. \n`+
@@ -220,10 +268,21 @@ async onTicketDetail(@Ctx() ctx: Context): Promise<void> {
       currency: 'ETB',
       tx_ref: ticketRef,
       phone_number:"0937108836",
+      subaccounts:[
+        {
+          id:'1',
+          split_type:SplitType.PERCENTAGE,
+          transaction_charge:5
+        }
+      ],
+      customization:{
+        title:"Mame Sodo Equb",
+        description:"You are paying for mame sodo Apache B2 Equb lotory",
+        logo:"https://images-platform.99static.com/eeT6XCZNJPVeYsVW-ESX45i7CbU=/123x157:1323x1357/500x500/top/smart/99designs-contests-attachments/89/89205/attachment_89205299"
+      }
       // callback_url: 'http://0.0.0.0:3000/payments/verify', 
       // return_url:`http://localhost:3000/payments/verify/${ticketRef}`
     };
-
     try {
       const { checkout_url } = await this.chapaService.initialize(initializeOptions);
       await ctx.reply('Please complete your payment by clicking the button below.', {
@@ -233,6 +292,7 @@ async onTicketDetail(@Ctx() ctx: Context): Promise<void> {
               text: 'Complate Payment - Checkout',
               web_app: { url: checkout_url.checkout_url }
             }
+
           ]]
         }
       });
