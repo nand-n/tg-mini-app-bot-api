@@ -1,10 +1,11 @@
-import { Controller, Post, Body, Get, Param, UseGuards } from '@nestjs/common';
+import { Controller, Post, Body, Get, Param, UseGuards, Req } from '@nestjs/common';
 import { AnnouncementsService } from './announcements.service';
 import { CreateAnnouncementDto } from './dto/announcment.dto';
 import { Roles } from '../auth/autherization/decorators/role.decorator';
 import { Role } from '../users/enums/role.enum';
-import { AccessTokenGuard } from '../auth/authentication/guards/access-token.guard';
 import { RolesGuard } from '../auth/autherization/guards/roles.guard';
+import { REQUEST_USER } from '../auth/auth.constants';
+import { User } from '../users/entities/user.entity';
 
 @Controller('announcements')
 export class AnnouncementsController {
@@ -12,13 +13,13 @@ export class AnnouncementsController {
 
   @Post()
   @Roles(Role.Admin)
-  // @UseGuards(AccessTokenGuard)
-  async create(@Body() createAnnouncementDto: CreateAnnouncementDto) {
-    return this.announcementService.create(createAnnouncementDto);
+  @UseGuards(RolesGuard)
+
+  async create(@Body() createAnnouncementDto: CreateAnnouncementDto,  @Req() req: Request,) {
+    const currentUser = req[REQUEST_USER] as User;
+    return this.announcementService.create(createAnnouncementDto , currentUser);
   }
   @Get()
-  @Roles(Role.Admin)
-  @UseGuards(RolesGuard)
   async findAll() {
     return this.announcementService.findAll();
   }
