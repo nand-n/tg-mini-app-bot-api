@@ -7,18 +7,17 @@ import { TypeOrmModule } from "@nestjs/typeorm";
 import { JwtModule, JwtService } from "@nestjs/jwt";
 import jwtConfig from "./config/jwt.config";
 import { ConfigModule } from "@nestjs/config";
-import { APP_GUARD } from "@nestjs/core";
 import { AccessTokenGuard } from "./authentication/guards/access-token.guard";
-import { AuthenticationGuard } from "./authentication/guards/authentication.guard";
 import { User } from "../users/entities/user.entity";
 import { RolesGuard } from "./autherization/guards/roles.guard";
 import { RefreshTokenIdsStorage } from "./authentication/refres-token-ids.storage";
 import { RefreshToken } from "./authentication/entities/refres-token.entity";
 import { UsersModule } from "../users/users.module";
+import { Announcement } from "../announcements/entities/announcement.entity";
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([User , RefreshToken]),
+    TypeOrmModule.forFeature([User , RefreshToken , Announcement]),
     JwtModule.registerAsync(jwtConfig.asProvider()),
     ConfigModule.forFeature(jwtConfig),
     forwardRef(() => UsersModule),
