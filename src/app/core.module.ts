@@ -13,7 +13,7 @@ import { ChapaModule } from './modules/chapa-sdk';
 @Global()
 @Module({
   imports: [PermissionModule, ProductsModule, UsersModule, ClientsModule , AnnouncementsModule , TicketsModule , DrawsModule, TelegramBotModule , ChapaModule.register({
-    secretKey: "CHASECK_TEST-EJCfEadYMB8UTtwE6MzTPJ5KNhwHTn4s",
+    secretKey: `CHASECK_TEST-EJCfEadYMB8UTtwE6MzTPJ5KNhwHTn4s`,
   }),],
 
   
