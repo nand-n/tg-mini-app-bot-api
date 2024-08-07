@@ -58,6 +58,7 @@ export class UsersService {
   }
 
   async assignRole(id: string, role: Role, currentUser: User): Promise<User> {
+    console.log(currentUser ,"************************");
     this.ensureSuperuser(currentUser);
     const user = await this.findOne(id);
     user.role = role;
