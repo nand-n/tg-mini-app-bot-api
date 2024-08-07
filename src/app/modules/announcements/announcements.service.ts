@@ -5,6 +5,7 @@ import { Announcement } from './entities/announcement.entity';
 import { CreateAnnouncementDto } from './dto/announcment.dto';
 import { TicketsService } from '../tickets/tickets.service';
 import { Draw } from '../draw/entities/draw.entity';
+import { User } from '../users/entities/user.entity';
 
 
 @Injectable()
@@ -17,8 +18,10 @@ export class AnnouncementsService {
     private ticketsService: TicketsService
   ) {}
 
-  async create(createAnnouncementDto: CreateAnnouncementDto) {
+  async create(createAnnouncementDto: CreateAnnouncementDto , currentUser:User) {
+     
     const announcement = this.announcementRepository.create(createAnnouncementDto);
+    announcement.createdBy = currentUser
     const savedAnnouncement = await this.announcementRepository.save(announcement);
 
     for (let i = 0; i < createAnnouncementDto.numberOfTickets; i++) {
@@ -36,9 +39,19 @@ async findAll() {
     return await this.announcementRepository
     .createQueryBuilder('announcement')
     .leftJoinAndSelect('announcement.tickets', 'ticket')
+    .leftJoinAndSelect('announcement.createdBy', 'user')
+    .select([
+      "announcement", 
+      'ticket',
+      'user.id', 
+      'user.name', 
+      'user.phone', 
+      'user.email', 
+      'user.role', 
+      'user.telegramUser'
+    ]) 
     .orderBy('ticket.number', 'ASC') 
     .getMany();
-
   }
 
   async findAllUnclosedAnnoucment() {
@@ -64,7 +77,6 @@ async findAll() {
 
     return announcements;
   }
-
   async findOne(id: string) {
     return await this.announcementRepository
     .createQueryBuilder('announcement')
