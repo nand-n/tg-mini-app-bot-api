@@ -8,11 +8,12 @@ import { Product } from '../products/entities/product.entity';
 import { AuthModule } from '../auth/auth.module';
 import jwtConfig from '../auth/config/jwt.config';
 import { ConfigModule } from '@nestjs/config';
+import { Announcement } from '../announcements/entities/announcement.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([User, Product ]) , forwardRef(() => AuthModule) ,  ConfigModule.forFeature(jwtConfig)],
+  imports: [TypeOrmModule.forFeature([User, Product , Announcement  ]) , forwardRef(() => AuthModule) ,  ConfigModule.forFeature(jwtConfig)],
   controllers: [UsersController],
-  providers: [UsersService, PaginationService],
+  providers: [UsersService, PaginationService ], 
   exports: [UsersService],
 })
 export class UsersModule {}
