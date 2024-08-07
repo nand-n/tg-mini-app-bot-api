@@ -55,6 +55,7 @@ export class DrawsService {
       draw.ticket = ticket;
       draw.announcementId = announcementId;
       return this.drawsRepository.save(draw);
+      
     });
 
     return Promise.all(draws);
