@@ -1,5 +1,4 @@
 import { Global, Module } from '@nestjs/common';
-
 import { PermissionModule } from './modules/permission/permission.module';
 import { ProductsModule } from './modules/products/products.module';
 import { UsersModule } from './modules/users/users.module';
@@ -19,3 +18,4 @@ import { ChapaModule } from './modules/chapa-sdk';
   
 })
 export class CoreModule {}
+
