@@ -59,7 +59,7 @@ export class UsersController {
   }
 
 
-  @Patch(':id/role')
+  @Patch(':id/assign-role')
   @Roles(Role.SuperAdmin)
   @UseGuards(AccessTokenGuard)
   async assignRole(
