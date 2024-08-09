@@ -5,6 +5,7 @@ import { Draw } from './entities/draw.entity';
 import { CreateDrawDto } from './dto/create-draw.dto';
 import { Announcement } from '../announcements/entities/announcement.entity';
 import { Ticket } from '../tickets/entities/ticket.entity';
+import { User } from '../users/entities/user.entity';
 
 @Injectable()
 export class DrawsService {
@@ -18,7 +19,6 @@ export class DrawsService {
   async createDraw(createDrawDto: CreateDrawDto): Promise<Draw[]> {
     const { announcementId } = createDrawDto;
 
-    // Check if a draw already exists for the announcement
     const existingDraws = await this.drawsRepository.find({ where: { announcementId } });
     if (existingDraws.length > 0) {
       throw new ConflictException('A draw has already been created for this announcement');
@@ -60,6 +60,60 @@ export class DrawsService {
 
     return Promise.all(draws);
   }
+
+async draw5LuckyNumbers(announcementId: string): Promise<Record<string, { ticketNumber: number, ticketId: string, user: User, telegramUser: string, phoneNumber: number }>> {
+  const existingDraws = await this.drawsRepository.find({ where: { announcementId } });
+    if (existingDraws.length > 0) {
+      throw new ConflictException('A draw has already been created for this announcement');
+    }
+ 
+  const announcement = await this.announcementsRepository.findOne({
+      where: { id: announcementId },
+      relations: ['tickets']
+  });
+
+  if (!announcement) {
+      throw new NotFoundException('Announcement not found');
+  }
+
+  const tickets = announcement.tickets;
+  if (tickets.length === 0) {
+      throw new NotFoundException('No tickets found for the announcement');
+  }
+
+  const assignedTickets = tickets.filter(ticket => ticket.player || ticket.payerPhone);
+  const assignedPercentage = (assignedTickets.length / tickets.length) * 100;
+  if (assignedPercentage < 85) {
+      throw new BadRequestException(`At least 85% of tickets must be assigned a player or payerPhone. Current percentage: ${assignedPercentage.toFixed(2)}%`);
+  }
+
+  const numberOfLuckyNumbers = 5;
+  const winners: Record<string, { ticketNumber: number, ticketId: string, user: User, telegramUser: string, phoneNumber: number }> = {};
+
+  const winnerLabels = ['1stWinner', '2ndWinner', '3rdWinner', '4thWinner', '5thWinner'];
+  const selectedTickets = new Set<string>();
+
+  while (selectedTickets.size < numberOfLuckyNumbers) {
+      const randomIndex = Math.floor(Math.random() * assignedTickets.length);
+      const selectedTicket = assignedTickets[randomIndex];
+
+      if (!selectedTickets.has(selectedTicket.id)) {
+          const winnerLabel = winnerLabels[selectedTickets.size];
+          winners[winnerLabel] = {
+              ticketNumber: selectedTicket.number,
+              ticketId: selectedTicket.id,
+              user: selectedTicket.player,
+              telegramUser: selectedTicket.telegramUser ,
+              phoneNumber: selectedTicket.payerPhone ,
+          };
+          selectedTickets.add(selectedTicket.id);
+      }
+  }
+
+  return winners;
+}
+
+
 
   async findAllByAnnouncement(announcementId: string): Promise<Draw[]> {
     return this.drawsRepository.find({
