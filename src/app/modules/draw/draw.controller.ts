@@ -17,6 +17,12 @@ export class DrawsController {
     return this.drawsService.findAllByAnnouncement(announcementId);
   }
 
+  @Get('five-lucky-numbers/:announcementId')
+  draw5LuckyNumbers(@Param('announcementId') announcementId: string): Promise<Record<string, { ticketNumber: number, ticketId: string }>> {
+    return this.drawsService.draw5LuckyNumbers(announcementId);
+  }
+  
+
   @Get('announcement/:announcementId/:id')
   findOneByAnnouncement(
     @Param('announcementId') announcementId: string,
