@@ -12,7 +12,7 @@ import { User } from '../../users/entities/user.entity';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Announcement,Ticket, Draw , User]), // Include all necessary entities here
+    TypeOrmModule.forFeature([Announcement,Ticket, Draw , User]),
   ],
   providers: [
     AnnouncementsService, 
