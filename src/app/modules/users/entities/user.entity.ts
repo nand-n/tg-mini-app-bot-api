@@ -5,6 +5,7 @@ import { IsOptional } from 'class-validator';
 import { Payment } from '../../payment/entities/payment.entity';
 import { Role } from '../enums/role.enum';
 import { Permission, PermissionType } from '../../auth/autherization/permission.type';
+import { Spin } from '../../spin/entities/spin.entity';
 
 @Entity()
 export class User extends BaseModel {
@@ -35,5 +36,8 @@ export class User extends BaseModel {
   @IsOptional()
   @OneToMany(() => Payment, (payment) => payment.user)
   payments: Payment[];
+
+  @OneToMany(() => Spin, spin => spin.user)
+  spins: Spin[]
 
 }
