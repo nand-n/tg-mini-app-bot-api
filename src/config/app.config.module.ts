@@ -7,7 +7,7 @@ import { validationSchema } from '@config/validation';
 package. The `forRoot` method is used to configure the module with the following options: */
 const configModule = ConfigModule.forRoot({
   isGlobal: true,
-  envFilePath: `./.env`,
+  envFilePath: `.env`,
 
   load: [configuration],
   validationSchema,
