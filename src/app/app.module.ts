@@ -50,6 +50,7 @@ configuration values obtained from a ConfigService. */
     //   }),
     //   inject: [ConfigService],
     // }),
+
     TypeOrmModule.forRootAsync({
       useFactory: () => ({
         type: 'postgres',
