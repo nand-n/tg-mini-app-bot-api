@@ -1,25 +1,16 @@
 import { Controller, Post, Get, Param, Body } from '@nestjs/common';
 import { SpinTheWheelService } from './spin.service';
+import { CreateSpinDto } from './dto/create-spin.dto';
 
 @Controller('spin-the-wheel')
 export class SpinTheWheelController {
   constructor(private readonly spinTheWheelService: SpinTheWheelService) {}
 
-  @Post('spin/:userId')
+  @Post('spin')
   createSpin(
-    @Param('userId') userId: string,
-    @Body('result') result: string,
+    @Body() createSpinDto: CreateSpinDto
   ) {
-    return this.spinTheWheelService.createSpin(userId, result);
-  }
-
-  @Get('user/:userId/spins')
-  getUserSpins(@Param('userId') userId: string) {
-    return this.spinTheWheelService.getUserSpins(userId);
-  }
-
-  @Get('spins')
-  getAllSpins() {
-    return this.spinTheWheelService.getAllSpins();
+    const { userId, selectedSegmentId } = createSpinDto;
+    return this.spinTheWheelService.createSpin(userId, selectedSegmentId);
   }
 }
