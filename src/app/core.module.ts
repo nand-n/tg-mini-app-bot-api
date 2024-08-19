@@ -9,10 +9,11 @@ import { DrawsModule } from './modules/draw/draw.module';
 import { TelegramBotModule } from './modules/telegramBot/telegram.module';
 import { ChapaModule } from './modules/chapa-sdk';
 import { SpinTheWheelModule } from './modules/spin/spin.module';
+import { SegmentModule } from './modules/spin-segments/segment.module';
 
 @Global()
 @Module({
-  imports: [PermissionModule, ProductsModule, UsersModule, ClientsModule , AnnouncementsModule , TicketsModule , DrawsModule, TelegramBotModule ,SpinTheWheelModule , ChapaModule.register({
+  imports: [PermissionModule, ProductsModule, UsersModule, ClientsModule , AnnouncementsModule , TicketsModule , DrawsModule, TelegramBotModule ,SpinTheWheelModule ,SegmentModule, ChapaModule.register({
     secretKey: `CHASECK_TEST-EJCfEadYMB8UTtwE6MzTPJ5KNhwHTn4s`,
   }),],
 
