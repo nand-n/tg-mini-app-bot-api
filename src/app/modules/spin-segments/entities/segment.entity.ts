@@ -13,6 +13,8 @@ export class Segment  extends BaseModel {
   @Column({ default: 0 })
   selectionCount: number;
 
-  @Column({nullable:true})
-  result: string; 
+  @OneToMany(() => Spin, spin => spin.result)
+  spins: Spin[];
+
+
 }
