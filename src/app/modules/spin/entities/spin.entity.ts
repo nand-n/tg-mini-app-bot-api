@@ -1,4 +1,3 @@
-// spin.entity.ts
 import { Entity, Column, ManyToOne, JoinColumn } from 'typeorm';
 import { User } from '../../users/entities/user.entity';
 import { BaseModel } from '@root/src/database/base.model';
@@ -13,6 +12,7 @@ export class Spin extends BaseModel {
   @ManyToOne(() => User, user => user.spins, { onDelete: 'CASCADE' })
   user: User;
 
-  @ManyToOne(() => Segment)
+  @ManyToOne(() => Segment, { nullable: true })
+  @JoinColumn({ name: 'result_id' }) 
   result: Segment;
 }
