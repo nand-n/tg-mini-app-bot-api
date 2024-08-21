@@ -10,7 +10,7 @@ export class SpinTheWheelController {
   createSpin(
     @Body() createSpinDto: CreateSpinDto
   ) {
-    const { userId, selectedSegmentId } = createSpinDto;
-    return this.spinTheWheelService.createSpin(userId, selectedSegmentId);
+    const { userId } = createSpinDto;
+    return this.spinTheWheelService.createSpin(userId);
   }
 }
