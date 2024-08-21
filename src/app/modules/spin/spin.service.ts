@@ -15,7 +15,7 @@ export class SpinTheWheelService {
     
     private segmentService: SegmentService,
   ) {}
-  async createSpin(userId: string, selectedSegmentId: string): Promise<Spin> {
+  async createSpin(userId: string): Promise<Spin> {
     const user = await this.userRepository.findOne({ where: { id: userId } });
     if (!user) {
       throw new Error('User not found');
