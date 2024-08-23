@@ -19,6 +19,7 @@ export class SpinTheWheelService {
     const user = await this.userRepository.findOne({ where: { id: userId } });
     if (!user) {
       throw new Error('User not found');
+      
     }
     const segments = await this.segmentService.findAll();
     const winningSegmentCounts = await this.spinRepository
