@@ -39,6 +39,8 @@ export class SpinTheWheelService {
       const weight = isCommonWinningSegment ? 1 : 3;
 
       return Array(weight).fill(segment);
+      
+
     });
 
     const winningSegment = weightedSegments[Math.floor(Math.random() * weightedSegments.length)];
