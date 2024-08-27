@@ -13,4 +13,18 @@ export class SpinTheWheelController {
     const { userId } = createSpinDto;
     return this.spinTheWheelService.createSpin(userId);
   }
+  @Post('tickets/buy')
+  buySpinTickets(
+    @Body() buyTicketsDto: { userId: string; numberOfTickets: number }
+  ) {
+    const { userId, numberOfTickets } = buyTicketsDto;
+    return this.spinTheWheelService.buySpinTickets(userId, numberOfTickets);
+  }
+  
+  // @Get('tickets/:userId')
+  // getSpinTickets(@Param('userId') userId: string) {
+  //   return this.spinTheWheelService.getSpinTickets(userId);
+  // }
+
+
 }
