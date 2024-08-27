@@ -11,6 +11,9 @@ export class Spin extends BaseModel {
 
   @ManyToOne(() => User, user => user.spins, { onDelete: 'CASCADE' })
   user: User;
+  
+  @Column({ default: 0 })
+  ticketCount: number; 
 
   @ManyToOne(() => Segment, { nullable: true })
   @JoinColumn({ name: 'result_id' }) 
