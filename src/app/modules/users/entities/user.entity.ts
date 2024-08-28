@@ -6,6 +6,7 @@ import { Payment } from '../../payment/entities/payment.entity';
 import { Role } from '../enums/role.enum';
 import { Permission, PermissionType } from '../../auth/autherization/permission.type';
 import { Spin } from '../../spin/entities/spin.entity';
+import { SpinTicket } from '../../spin/entities/spin-ticket.entity';
 
 @Entity()
 export class User extends BaseModel {
@@ -39,5 +40,8 @@ export class User extends BaseModel {
 
   @OneToMany(() => Spin, spin => spin.user)
   spins: Spin[]
+
+  @OneToMany(() => SpinTicket, spinTicket => spinTicket.user)
+  spinTickets: SpinTicket[];
 
 }
