@@ -1,6 +1,7 @@
-import { Controller, Post, Get, Param, Body } from '@nestjs/common';
+import { Controller, Post, Get, Param, Body, NotFoundException } from '@nestjs/common';
 import { SpinTheWheelService } from './spin.service';
 import { CreateSpinDto } from './dto/create-spin.dto';
+import { SpinTicket } from './entities/spin-ticket.entity';
 
 @Controller('spin-the-wheel')
 export class SpinTheWheelController {
@@ -15,16 +16,28 @@ export class SpinTheWheelController {
   }
   @Post('tickets/buy')
   buySpinTickets(
-    @Body() buyTicketsDto: { userId: string; numberOfTickets: number }
+    @Body() buyTicketsDto: {  numberOfTickets: number }
   ) {
-    const { userId, numberOfTickets } = buyTicketsDto;
-    return this.spinTheWheelService.buySpinTickets(userId, numberOfTickets);
+    const { numberOfTickets } = buyTicketsDto;
+    return this.spinTheWheelService.buySpinTickets(numberOfTickets);
   }
   
-  // @Get('tickets/:userId')
-  // getSpinTickets(@Param('userId') userId: string) {
-  //   return this.spinTheWheelService.getSpinTickets(userId);
-  // }
+  
+  @Post('verify-and-issue-tickets/:userId')
+  async verifyAndIssueTickets(
+    @Param('userId') userId: string,
+    @Body('tx_ref') txRef: string
+  ): Promise<{ message: string; tickets: SpinTicket[] }> {
+    try {
+      const tickets = await this.spinTheWheelService.verifyAndIssueTickets(userId, txRef);
+      return {
+        message: 'Payment verified successfully and tickets issued.',
+        tickets,
+      };
+    } catch (error) {
+      throw new NotFoundException(error.message);
+    }
+  }
 
 
 }
