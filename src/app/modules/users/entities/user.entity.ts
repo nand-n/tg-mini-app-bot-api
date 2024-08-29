@@ -7,6 +7,7 @@ import { Role } from '../enums/role.enum';
 import { Permission, PermissionType } from '../../auth/autherization/permission.type';
 import { Spin } from '../../spin/entities/spin.entity';
 import { SpinTicket } from '../../spin/entities/spin-ticket.entity';
+import { Dice } from '../../dice/entities/dice.entity';
 
 @Entity()
 export class User extends BaseModel {
@@ -43,5 +44,10 @@ export class User extends BaseModel {
 
   @OneToMany(() => SpinTicket, spinTicket => spinTicket.user)
   spinTickets: SpinTicket[];
+
+  @Column({ default: 0 })
+  diceBalance: number;
+  @OneToMany(() => Dice, spinTicket => spinTicket.user)
+  dice: Dice[];
 
 }
