@@ -49,6 +49,13 @@ export class UsersService {
     return this.userRepository.findOneBy({ id });
   }
 
+  async updateBalance(userId: string, newBalance: number): Promise<User> {
+    const user = await this.findOne(userId);
+
+    user.diceBalance = newBalance;
+
+    return await this.userRepository.save(user);
+  }
   async remove(id: string) {
     const doesExist = await this.userRepository.findOne({ where: { id } });
     if (!doesExist) {
