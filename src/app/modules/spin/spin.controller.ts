@@ -21,6 +21,14 @@ export class SpinTheWheelController {
     const { numberOfTickets } = buyTicketsDto;
     return this.spinTheWheelService.buySpinTickets(numberOfTickets);
   }
+
+  @Get('spin-ticket/:id')
+  getSpinTickets (
+  @Param('id') userId:string
+  ){
+    return this.spinTheWheelService.getMytickets(userId)
+  }
+
   
   
   @Post('verify-and-issue-tickets/:userId')
