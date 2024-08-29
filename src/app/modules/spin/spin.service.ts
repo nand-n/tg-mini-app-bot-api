@@ -67,6 +67,7 @@ async createSpin(userId: string): Promise<any> {
     await this.spinRepository.save(spin);
 
     availableTicket.used = true;
+    availableTicket.spin= spin
     await this.spinTicketRepository.save(availableTicket);
 
     return this.spinRepository.findOne({
@@ -79,6 +80,14 @@ async createSpin(userId: string): Promise<any> {
   }
   
 }
+async getMytickets(userId:string) {
+  const myTickets = await this.spinTicketRepository.findBy({
+    user:{
+      id:userId
+    }
+  })
+  return myTickets
+}
 
 
 async buySpinTickets(numberOfTickets: number) {
@@ -88,7 +97,7 @@ async buySpinTickets(numberOfTickets: number) {
   const initializeOptions:InitializeOptions = {
     first_name: 'John',
     last_name: 'Doe',
-    amount: `${numberOfTickets * 10}`,
+    amount: `${numberOfTickets * 2}`,
     currency: 'ETB',
     tx_ref: ticketRef,
     phone_number: '0937108836',
@@ -119,7 +128,7 @@ async verifyAndIssueTickets(userId: string, txRef: string): Promise<SpinTicket[]
         throw new NotFoundException('User not found');
       }
 
-      const numberOfTickets = parseInt(verificationResponse.data.amount) / 10;
+      const numberOfTickets = parseInt(verificationResponse.data.amount) / 2;
 
       const tickets: SpinTicket[] = [];
 
