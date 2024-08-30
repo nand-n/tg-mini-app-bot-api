@@ -6,17 +6,16 @@ import { Dice } from './entities/dice.entity';
 import { UsersService } from '../users/users.service';
 import { ChapaService, InitializeOptions, VerifyOptions, VerifyResponse } from '../chapa-sdk';
 import { User } from '../users/entities/user.entity';
-
+import { BalanceService } from '../balances/balance.service';
 
 @Injectable()
 export class DiceService {
   constructor(
     @InjectRepository(Dice)
     private readonly diceRepository: Repository<Dice>,
-    @InjectRepository(User)
-    private readonly userRepository: Repository<User>,
     private readonly userService: UsersService,
     private readonly chapaService: ChapaService,
+    private readonly balanceService: BalanceService,
   ) {}
 
   async playDice(createDiceDto: CreateDiceDto): Promise<Dice> {
@@ -27,21 +26,20 @@ export class DiceService {
       throw new NotFoundException(`User with ID ${userId} not found`);
     }
 
-    if (user.diceBalance < betAmount) {
+    const balance = await this.balanceService.getBalance(userId);
+    if (balance.diceBalance < betAmount) { 
       throw new BadRequestException('Insufficient balance to place bet');
     }
-
     const outcome = this.rollDice(dicePositions);
 
-    let updatedBalance = user.diceBalance;
+    let updatedBalance = balance.diceBalance;
     if (outcome.isWin) {
       updatedBalance += outcome.winnings;
     } else {
       updatedBalance -= betAmount;
     }
 
-    await this.userService.updateBalance(userId, updatedBalance);
-
+    await this.balanceService.updateBalance(userId, { diceBalance: updatedBalance }); // Use BalanceService to update balance
     const diceGame = this.diceRepository.create({
       dicePlayTime: new Date(),
       diceBalance: updatedBalance,
@@ -51,15 +49,14 @@ export class DiceService {
     return await this.diceRepository.save(diceGame);
   }
 
-
   async rechargeBalance(userId: string, amount: number): Promise<{ message: string; paymentLink: string; txRef: string }> {
+    console.log(userId, amount);
     const user = await this.userService.findOne(userId);
-    
     const txRef = `recharge_${userId}_${Date.now()}`;
 
     const initializeOptions: InitializeOptions = {
       first_name: user.name,
-      last_name:user.name,
+      last_name: user.name+ Date.now(),
       amount: `${amount}`,
       currency: 'ETB',
       tx_ref: txRef,
@@ -86,13 +83,12 @@ export class DiceService {
       const verificationResponse: VerifyResponse = await this.chapaService.verify(verifyOptions);
 
       if (verificationResponse.data.status === 'success') {
-        const user = await this.userService.findOne(userId);
-
         const rechargeAmount = parseFloat(verificationResponse.data.amount);
 
-        user.diceBalance += rechargeAmount;
+        await this.balanceService.updateBalance(userId, { diceBalance: rechargeAmount });
 
-        return await this.userRepository.save(user);
+        const user = await this.userService.findOne(userId);
+        return user;
       } else {
         throw new HttpException('Payment verification failed or payment not successful.', HttpStatus.BAD_REQUEST);
       }
@@ -102,18 +98,12 @@ export class DiceService {
     }
   }
 
-  async getBalance(userId: string): Promise<number> {
-    const dice = await this.diceRepository.findOne({
-      where: { user: { id: userId } },
-      relations: ['user'],
-    });
 
-    if (!dice) {
-      throw new NotFoundException('User or Dice record not found');
-    }
-
-    return dice.diceBalance;
+  async getBalance(userId: string): Promise<{ balance: number }> {
+    const balance = await this.balanceService.getBalance(userId);
+    return { balance: balance.diceBalance };
   }
+
   private rollDice(dicePositions: number[]): { isWin: boolean, winnings: number } {
     const rolledDice = Math.floor(Math.random() * 6) + 1;
     const isWin = dicePositions.includes(rolledDice);
