@@ -40,8 +40,10 @@ export class UsersService {
 
   async findOne(id: string) {
     try {
-      return await this.userRepository.findOneByOrFail({ id: id });
-    } catch (error) {}
+      return await this.userRepository.findOneBy({id});
+    } catch (error) {
+      return error
+    }
   }
 
   async update(id: string, updateUserDto: UpdateUserDto) {
@@ -51,6 +53,7 @@ export class UsersService {
 
   async updateBalance(userId: string, newBalance: number): Promise<User> {
     const user = await this.findOne(userId);
+
 
     user.diceBalance = newBalance;
 
