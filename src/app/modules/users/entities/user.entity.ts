@@ -1,5 +1,5 @@
 import { BaseModel } from '../../../../database/base.model';
-import { Entity, Column, OneToMany } from 'typeorm';
+import { Entity, Column, OneToMany, OneToOne, JoinColumn } from 'typeorm';
 import { Ticket } from '../../tickets/entities/ticket.entity';
 import { IsOptional } from 'class-validator';
 import { Payment } from '../../payment/entities/payment.entity';
@@ -8,6 +8,7 @@ import { Permission, PermissionType } from '../../auth/autherization/permission.
 import { Spin } from '../../spin/entities/spin.entity';
 import { SpinTicket } from '../../spin/entities/spin-ticket.entity';
 import { Dice } from '../../dice/entities/dice.entity';
+import { Balance } from '../../balances/entities/balance.entity';
 
 @Entity()
 export class User extends BaseModel {
@@ -49,5 +50,9 @@ export class User extends BaseModel {
   diceBalance: number;
   @OneToMany(() => Dice, spinTicket => spinTicket.user)
   dice: Dice[];
+
+  @OneToOne(() => Balance, (balance) => balance.user, { cascade: true })
+  @JoinColumn()
+  balance: Balance;
 
 }
