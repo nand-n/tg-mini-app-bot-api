@@ -21,8 +21,8 @@ export class DiceController {
   async getBalance(
     @Param('id') userId: string,
   ) {
-    await this.diceService.getBalance(userId);
-    return { message: 'Balance recharged successfully' };
+    return await this.diceService.getBalance(userId);
+    
   }
 
   @Post(':id/verify-recharge')
