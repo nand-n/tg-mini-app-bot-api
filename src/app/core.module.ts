@@ -11,10 +11,11 @@ import { ChapaModule } from './modules/chapa-sdk';
 import { SpinTheWheelModule } from './modules/spin/spin.module';
 import { SegmentModule } from './modules/spin-segments/segment.module';
 import { DiceModule } from './modules/dice/dice.module';
+import { BalanceModule } from './modules/balances/balance.module';
 
 @Global()
 @Module({
-  imports: [PermissionModule, ProductsModule, UsersModule, ClientsModule , AnnouncementsModule , TicketsModule , DrawsModule, TelegramBotModule ,SpinTheWheelModule ,SegmentModule, DiceModule,ChapaModule.register({
+  imports: [PermissionModule, ProductsModule, UsersModule, ClientsModule , AnnouncementsModule , TicketsModule , DrawsModule, TelegramBotModule ,SpinTheWheelModule ,SegmentModule, BalanceModule, DiceModule,ChapaModule.register({
     secretKey: `CHASECK_TEST-EJCfEadYMB8UTtwE6MzTPJ5KNhwHTn4s`,
   }),],
 
