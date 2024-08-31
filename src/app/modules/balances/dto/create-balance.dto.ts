@@ -3,11 +3,11 @@ import { IsNumber, IsOptional } from 'class-validator';
 export class CreateBalanceDto {
   @IsOptional()
   @IsNumber()
-  diceBalance: number;
+  diceBalance?: number;
   @IsOptional()
   @IsNumber()
-  kenoBalance: number;
+  kenoBalance?: number;
   @IsOptional()
   @IsNumber()
-  bingoBalance: number;
+  bingoBalance?: number;
 }
