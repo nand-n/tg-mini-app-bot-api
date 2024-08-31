@@ -19,6 +19,7 @@ import { ActiveUserData } from "../interface/active-user-data.interface";
 import { InvalidateRefreshTokenError } from "./errors/invalidate-refresh-toke.error";
 import { RefreshTokenIdsStorage } from "./refres-token-ids.storage";
 import { Role } from "../../users/enums/role.enum";
+import { BalanceService } from "../../balances/balance.service";
   
   @Injectable()
   export class AuthenticationService {
@@ -30,6 +31,8 @@ import { Role } from "../../users/enums/role.enum";
       @Inject(jwtConfig.KEY)
       private readonly jwtConfiguration: ConfigType<typeof jwtConfig>,
       private readonly refreshTokenIdsStorage: RefreshTokenIdsStorage,
+    private readonly balanceService: BalanceService,
+
     ) {}
   
     async signUp(signUpDto: SignUpDto) {
@@ -42,8 +45,11 @@ import { Role } from "../../users/enums/role.enum";
         user.telegramUser = signUpDto.telegramUser;
         user.role = signUpDto.role || Role.Regular;
         user.permissions = signUpDto.permissions || [];
-  
-        return await this.userRepository.save(user);
+        const createdUser = await this.userRepository.save(user);
+        await this.balanceService.createBalance(createdUser.id , {diceBalance:0,
+          kenoBalance:0,
+          bingoBalance:0})
+        return  createdUser
       } catch (err) {
         const pgUniqueViolationCode = "23505";
         if (err.code === pgUniqueViolationCode) {
