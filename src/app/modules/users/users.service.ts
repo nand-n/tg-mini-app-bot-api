@@ -11,16 +11,22 @@ import { User } from './entities/user.entity';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { Role } from './enums/role.enum';
 import { PermissionType } from '../auth/autherization/permission.type';
+import { BalanceService } from '../balances/balance.service';
 
 @Injectable()
 export class UsersService {
   constructor(
     @InjectRepository(User) private userRepository: Repository<User>,
     private readonly paginationService: PaginationService,
+    private readonly balanceService: BalanceService,
+
   ) {}
 
   async create(createUserDto: CreateUserDto) {
     const user = this.userRepository.create(createUserDto);
+    await this.balanceService.createBalance(user.id , {diceBalance:0,
+      kenoBalance:0,
+      bingoBalance:0})
     return await this.userRepository.save(user);
   }
 
