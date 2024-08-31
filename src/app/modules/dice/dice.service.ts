@@ -1,3 +1,4 @@
+
 import { Injectable, NotFoundException, BadRequestException, HttpException, HttpStatus } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -84,8 +85,14 @@ export class DiceService {
 
       if (verificationResponse.data.status === 'success') {
         const rechargeAmount = parseFloat(verificationResponse.data.amount);
-
-        await this.balanceService.updateBalance(userId, { diceBalance: rechargeAmount });
+      const existingBalance = await this.balanceService.getBalance(userId);
+      if (existingBalance) {
+        await this.balanceService.updateBalance(userId, { diceBalance: existingBalance.diceBalance + rechargeAmount });
+      } else {
+        await this.balanceService.createBalance(userId, {
+          diceBalance: rechargeAmount
+        });
+      }
 
         const user = await this.userService.findOne(userId);
         return user;
