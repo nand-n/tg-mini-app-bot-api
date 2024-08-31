@@ -11,14 +11,14 @@ import { AuthModule } from '../auth/auth.module';
 import jwtConfig from '../auth/config/jwt.config';
 import { ConfigModule } from '@nestjs/config';
 import { UsersService } from '../users/users.service';
-import { UsersModule } from '../users/users.module';
 import { PaginationService } from '@root/src/core/pagination/pagination.service';
-import { RolesGuardService } from '@root/src/core/middlewares/roleMiddleware';
+import { BalanceService } from '../balances/balance.service';
+import { Balance } from '../balances/entities/balance.entity';
 
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Announcement ,Ticket, User , Draw ]) , TicketsModule,  forwardRef(() => AuthModule) ,  TicketsModule ,  ConfigModule.forFeature(jwtConfig) ],
-  providers: [AnnouncementsService  ,UsersService , PaginationService ],
+  imports: [TypeOrmModule.forFeature([Announcement ,Ticket, User , Draw , Balance]) , TicketsModule,  forwardRef(() => AuthModule) ,  TicketsModule ,  ConfigModule.forFeature(jwtConfig) ],
+  providers: [AnnouncementsService  ,UsersService , PaginationService, BalanceService ],
   controllers: [AnnouncementsController],
   exports:[AnnouncementsService]
 })
