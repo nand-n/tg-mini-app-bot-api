@@ -7,7 +7,7 @@ import { Balance } from './entities/balance.entity';
 @Module({
   imports: [TypeOrmModule.forFeature([Balance])],
   providers: [BalanceService],
-  controllers: [BalanceController],
+  controllers: [BalanceController,],
   exports: [BalanceService],
 
 })
