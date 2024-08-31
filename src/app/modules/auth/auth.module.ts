@@ -14,10 +14,12 @@ import { RefreshTokenIdsStorage } from "./authentication/refres-token-ids.storag
 import { RefreshToken } from "./authentication/entities/refres-token.entity";
 import { UsersModule } from "../users/users.module";
 import { Announcement } from "../announcements/entities/announcement.entity";
+import { BalanceService } from "../balances/balance.service";
+import { Balance } from "../balances/entities/balance.entity";
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([User , RefreshToken , Announcement]),
+    TypeOrmModule.forFeature([User , RefreshToken , Announcement,Balance]),
     JwtModule.registerAsync(jwtConfig.asProvider()),
     ConfigModule.forFeature(jwtConfig),
     forwardRef(() => UsersModule),
@@ -41,6 +43,8 @@ import { Announcement } from "../announcements/entities/announcement.entity";
     AuthenticationService,
     RolesGuard, 
     JwtService,
+    BalanceService,
+
   ],
   controllers: [AuthenticationController],
   exports: [AccessTokenGuard, RolesGuard, JwtService],
