@@ -77,7 +77,7 @@ export class GreeterUpdate {
   async onAnnouncementDetail(@Ctx() ctx: Context): Promise<void> {
     const announcementId = ctx.match[1];
     const announcement = await this.announcementsService.findOne(announcementId);
-
+    
     if (!announcement) {
       await ctx.reply("Announcement not found.");
       return;
@@ -104,8 +104,10 @@ export class GreeterUpdate {
         reply_markup: {
           inline_keyboard: inlineKeyboard
         }
-      }
+      },
     );
+
+    console.log(ctx.botInfo);
   }
   @Hears("Lucky Numbers")
   async onLuckyNumbers(@Ctx() ctx: Context): Promise<void> {
