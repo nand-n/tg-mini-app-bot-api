@@ -1,8 +1,11 @@
-import { Module } from "@nestjs/common";
+import { MiddlewareConsumer, Module } from "@nestjs/common";
 import { sessionMiddleware } from "@root/src/core/middlewares/botSession.midleware";
 import { TelegrafModule } from "nestjs-telegraf";
 import { LorryAppBotName } from "./constants";
 import { GreeterModule } from "./lory-app/lorryApp.module";
+import { ContextMiddleware } from "@root/src/core/middlewares/context.telegram";
+import { TenantMiddleware } from "@root/src/core/middlewares/tenant.middleware";
+import { TenantModule } from "../tenants/tenant.module";
 
 @Module({
     imports: [
@@ -15,6 +18,17 @@ import { GreeterModule } from "./lory-app/lorryApp.module";
         }),
       }),
       GreeterModule,
+      TenantModule
     ],
   })
-  export class TelegramBotModule {}
+  export class TelegramBotModule {
+    configure(consumer: MiddlewareConsumer) {
+      consumer
+        .apply(ContextMiddleware)  
+        .forRoutes('*'); 
+  
+      consumer
+        .apply(TenantMiddleware)  
+        .forRoutes('*'); 
+    }
+  }
