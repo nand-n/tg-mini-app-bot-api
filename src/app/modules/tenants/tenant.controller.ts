@@ -7,10 +7,7 @@ import { TenantService } from './tenant.service';
 export class TenantController {
   constructor(private readonly tenantService: TenantService) {}
 
-//   @Post()
-//   create(@Body() createTenantDto: CreateTenantDto) {
-//     return this.tenantService.create(createTenantDto);
-//   }
+
 @Post()
 create(@Req() req, @Body() createTenantDto: CreateTenantDto) {
   return this.tenantService.registerTenant(createTenantDto);
