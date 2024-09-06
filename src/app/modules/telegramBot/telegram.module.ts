@@ -4,7 +4,7 @@ import { TelegrafModule } from "nestjs-telegraf";
 import { LorryAppBotName } from "./constants";
 import { GreeterModule } from "./lory-app/lorryApp.module";
 import { ContextMiddleware } from "@root/src/core/middlewares/context.telegram";
-import { TenantMiddleware } from "@root/src/core/middlewares/tenant.middleware";
+// import { TenantMiddleware } from "@root/src/core/middlewares/tenant.middleware";
 import { TenantModule } from "../tenants/tenant.module";
 
 @Module({
@@ -22,13 +22,13 @@ import { TenantModule } from "../tenants/tenant.module";
     ],
   })
   export class TelegramBotModule {
-    configure(consumer: MiddlewareConsumer) {
-      consumer
-        .apply(ContextMiddleware)  
-        .forRoutes('*'); 
+    // configure(consumer: MiddlewareConsumer) {
+    //   consumer
+    //     .apply(ContextMiddleware)  
+    //     .forRoutes('*'); 
   
-      consumer
-        .apply(TenantMiddleware)  
-        .forRoutes('*'); 
-    }
+    //   consumer
+    //     .apply(TenantMiddleware)  
+    //     .forRoutes('*'); 
+    // }
   }
