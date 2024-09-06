@@ -4,9 +4,6 @@ import { User } from '../../users/entities/user.entity';
 
 @Entity()
 export class Balance extends BaseModel {
-  // @OneToOne(() => User, (user) => user.balance)
-  // user: User;
-
   @OneToOne(() => User, (user) => user.balance)
   @JoinColumn({ name: 'userId' })
   user: User;
