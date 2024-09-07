@@ -19,4 +19,9 @@ export class KenoController {
   async getUserKenoGames(@Param('userId') userId: string) {
     return this.kenoService.getUserKenoGames(userId);
   }
+  @Get('balance/:userId')
+  async getUserBalance(@Param('userId') userId: string) {
+    return this.kenoService.getUserBalance(userId);
+    
+  }
 }
