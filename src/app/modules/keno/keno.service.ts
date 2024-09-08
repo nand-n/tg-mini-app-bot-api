@@ -258,14 +258,13 @@ export class KenoService {
   
     // Adjust win strategy based on recent patterns
     let shouldWin = false;
-  
     // Strategy logic:
     // 1. If the user lost 3+ times in a row, ensure a win (reset after win).
     // 2. If user won recently (1-2 games), don't let them win again too soon.
     // 3. Use a small chance (like 10-20%) to win if neither of the above applies.
     if (recentLosses >= 6 && recentWins == 0) {
       shouldWin = true; // Win after 3 losses in a row
-    } else if (recentWins > 0 && recentWins / totalGames > 0.6) { 
+    } else if (recentWins > 0 && recentWins / totalGames > 0.1) { 
       shouldWin = false; // Limit too frequent wins (don't allow more than 30% win rate)
     } else {
       shouldWin = Math.random() < 0.15; // Small chance to win (15%)
@@ -339,7 +338,6 @@ export class KenoService {
       throw new NotFoundException(`Balance for user ${userId} not found`);
     } 
     const keno = await this.kenoGameRepository.find({ where: { balance:{id:balance.id} } })
-console.log(keno);
 
     return keno;
   }
