@@ -6,7 +6,7 @@ import { ClientsModule } from './modules/clients/clients.module';
 import { AnnouncementsModule } from './modules/announcements/announcements.module';
 import { TicketsModule } from './modules/tickets/tickets.module';
 import { DrawsModule } from './modules/draw/draw.module';
-import { TelegramBotModule } from './modules/telegramBot/telegram.module';
+// import { TelegramBotModule } from './modules/telegramBot/telegram.module';
 import { ChapaModule } from './modules/chapa-sdk';
 import { SpinTheWheelModule } from './modules/spin/spin.module';
 import { SegmentModule } from './modules/spin-segments/segment.module';
@@ -24,7 +24,7 @@ import { KenoModule } from './modules/keno/keno.module';
     AnnouncementsModule ,
     TicketsModule , 
     DrawsModule, 
-    TelegramBotModule ,
+    // TelegramBotModule ,
     SpinTheWheelModule ,
     SegmentModule, 
     BalanceModule, 

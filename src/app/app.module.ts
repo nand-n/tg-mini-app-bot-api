@@ -54,7 +54,7 @@ configuration values obtained from a ConfigService. */
     TypeOrmModule.forRootAsync({
       useFactory: () => ({
         type: 'postgres',
-        host: 'localhost',
+        host: 'db',
         port: 5432,
         username: 'postgres',
         password: 'postgres',

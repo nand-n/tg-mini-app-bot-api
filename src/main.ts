@@ -27,6 +27,7 @@ async function bootstrap() {
   setupSwagger(app);
   app.use(cookieParser());
   const port = configService.get<number>('app.port');
+  
   await app.listen(port);
 }
 bootstrap();
