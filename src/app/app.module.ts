@@ -36,11 +36,28 @@ configuration values obtained from a ConfigService. */
         }
       ]
     ),
+    // TypeOrmModule.forRootAsync({
+    //   imports: [ConfigModule],
+    //   useFactory: (configService: ConfigService) => ({
+    //     type:"postgres",
+    //     // type: configService.get<'sqlite' | 'postgres'>('db.type'),
+    //     host: configService.get<string>('db.host'),
+    //     port: configService.get<number>('db.port'),
+    //     username: configService.get<string>('db.user'),
+    //     password: configService.get<string>('db.password'),
+    //     database: configService.get<string>('db.name'),
+    //     entities: [__dirname + '/../**/*.entity{.ts,.js}'],
+    //     synchronize: configService.get<boolean>('db.synchronize'),
+    //   }),
+    //   inject: [ConfigService],
+    // }),
+
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       useFactory: (configService: ConfigService) => ({
-        type:"postgres",
-        // type: configService.get<'sqlite' | 'postgres'>('db.type'),
+        type: configService.get<'postgres'>('db.type'),
+
+        // type:"postgres",
         host: configService.get<string>('db.host'),
         port: configService.get<number>('db.port'),
         username: configService.get<string>('db.user'),
@@ -48,9 +65,13 @@ configuration values obtained from a ConfigService. */
         database: configService.get<string>('db.name'),
         entities: [__dirname + '/../**/*.entity{.ts,.js}'],
         synchronize: configService.get<boolean>('db.synchronize'),
+        ssl: {
+          rejectUnauthorized: false,
+        },
       }),
       inject: [ConfigService],
     }),
+    
 
     // TypeOrmModule.forRootAsync({
     //   useFactory: () => ({
@@ -65,7 +86,7 @@ configuration values obtained from a ConfigService. */
     //   }),
     // }),
     // TypeOrmModule.forRootAsync(dataSource),
-    // HealthModule,
+    HealthModule,
   ],
 })
 export class AppModule {}
