@@ -36,34 +36,34 @@ configuration values obtained from a ConfigService. */
         }
       ]
     ),
-    // TypeOrmModule.forRootAsync({
-    //   imports: [ConfigModule],
-    //   useFactory: (configService: ConfigService) => ({
-    //     type: configService.get<'sqlite' | 'postgres'>('db.type'),
-    //     host: configService.get<string>('db.host'),
-    //     port: configService.get<number>('db.port'),
-    //     username: configService.get<string>('db.user'),
-    //     password: configService.get<string>('db.password'),
-    //     database: configService.get<string>('db.name'),
-    //     entities: [__dirname + '/../**/*.entity{.ts,.js}'],
-    //     synchronize: configService.get<boolean>('db.synchronize'),
-    //   }),
-    //   inject: [ConfigService],
-    // }),
-
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
-      useFactory: () => ({
-        type: 'postgres',
-        host: 'db',
-        port: 5432,
-        username: 'postgres',
-        password: 'postgres',
-        database: 'sampledb',
+      useFactory: (configService: ConfigService) => ({
+        type:"postgres",
+        // type: configService.get<'sqlite' | 'postgres'>('db.type'),
+        host: configService.get<string>('db.host'),
+        port: configService.get<number>('db.port'),
+        username: configService.get<string>('db.user'),
+        password: configService.get<string>('db.password'),
+        database: configService.get<string>('db.name'),
         entities: [__dirname + '/../**/*.entity{.ts,.js}'],
-        synchronize: true,
+        synchronize: configService.get<boolean>('db.synchronize'),
       }),
+      inject: [ConfigService],
     }),
+
+    // TypeOrmModule.forRootAsync({
+    //   useFactory: () => ({
+    //     type: 'postgres',
+    //     host: 'db',
+    //     port: 5432,
+    //     username: 'postgres',
+    //     password: 'postgres',
+    //     database: 'sampledb',
+    //     entities: [__dirname + '/../**/*.entity{.ts,.js}'],
+    //     synchronize: true,
+    //   }),
+    // }),
     // TypeOrmModule.forRootAsync(dataSource),
     // HealthModule,
   ],
