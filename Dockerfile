@@ -4,13 +4,13 @@ WORKDIR /app
 
 COPY package*.json ./
 
-RUN yarn
+RUN npm run
 
 COPY . .
 
-# RUN yarn build
+# RUN npm run build
 
-EXPOSE 3000
+EXPOSE 5000
 
 CMD [ "npm", "run", "start:dev" ]
 
@@ -20,12 +20,12 @@ WORKDIR /app
 
 COPY package*.json ./
 
-RUN yarn
+RUN npm run
 
 COPY . .
 
-RUN yarn build
+RUN npm run build
 
-EXPOSE 3000
+EXPOSE 5000
 
 CMD [ "npm", "run", "start:prod" ]
