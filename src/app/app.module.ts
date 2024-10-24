@@ -65,7 +65,7 @@ configuration values obtained from a ConfigService. */
       }),
     }),
     // TypeOrmModule.forRootAsync(dataSource),
-    HealthModule,
+    // HealthModule,
   ],
 })
 export class AppModule {}
