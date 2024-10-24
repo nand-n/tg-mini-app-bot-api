@@ -18,5 +18,5 @@ jobs:
 
       - name: Push image to Docker Hub
         run: |
-          docker login -u nahi002 -p ${{ secrets.DOKER_HUB_TOKEN }}
+          docker login -u nahi002 -p ${{ secrets.CARD_GAMES_TOKEN }}
           docker push nahi002/cardgames:latest
