@@ -1,4 +1,4 @@
-name: Build and Publish image to Koyeb
+name: Card Games Docker image
 on:
   workflow_dispatch:
   push:
@@ -14,26 +14,9 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Build Docker image
-        run: docker build . -t nahi002/mame-sodo-telegram-bot:latest
+        run: docker build . -t nahi002/cardgames:latest
 
       - name: Push image to Docker Hub
         run: |
           docker login -u nahi002 -p ${{ secrets.DOKER_HUB_TOKEN }}
-          docker push nahi002/mame-sodo-telegram-bot:latest
-  # deploy:
-  #   runs-on: ubuntu-latest
-
-  #   steps:
-  #     - name: Checkout code
-  #       uses: actions/checkout@v4
-
-  #     - name: Install Koyeb CLI
-  #       run: |
-  #         curl -fsSL https://raw.githubusercontent.com/koyeb/koyeb-cli/master/install.sh | sh
-  #         echo "::add-path::/home/runner/.koyeb/bin"
-  #         koyeb --version
-
-  #     - name: Deploy to Koyeb
-  #       run: |
-  #         koyeb auth login --api-key "${{ secrets.KOYEB_API_KEY }}"
-  #         koyeb service update mame-sodo-telegram-bot --image nahi002/mame-sodo-telegram-bot:latest
+          docker push nahi002/cardgames:latest
