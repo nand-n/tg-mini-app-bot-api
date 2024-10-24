@@ -61,7 +61,6 @@ configuration values obtained from a ConfigService. */
         database: 'sampledb',
         entities: [__dirname + '/../**/*.entity{.ts,.js}'],
         synchronize: true,
-        ssl:true
       }),
     }),
     // TypeOrmModule.forRootAsync(dataSource),
