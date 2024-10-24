@@ -52,6 +52,7 @@ configuration values obtained from a ConfigService. */
     // }),
 
     TypeOrmModule.forRootAsync({
+      imports: [ConfigModule],
       useFactory: () => ({
         type: 'postgres',
         host: 'db',
